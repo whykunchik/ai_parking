@@ -1,5 +1,6 @@
 import cv2
 import pytesseract as pytess
+from imutils import contours
 
 image = cv2.imread("images/image99.jpg") #изображение авто
 
@@ -14,7 +15,10 @@ gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #делаем изображен�
 """
 thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_OTSU)[1]
 
-
+#выделяем контуры из изображения(знак - прямоугольный контур)
+cnts = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[0] #получаем именно список контуров
+cnts, _ = contours.sort_contours(cnts) #координаты крайних точек найденных контуров
+print(cnts) 
 
 #уменьшаем фото
 im = thresh
