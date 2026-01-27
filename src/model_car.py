@@ -25,9 +25,8 @@ else:
     pytess.pytesseract.tesseract_cmd = tesseract_path
 
 pytess.pytesseract.tesseract_cmd = tesseract_path
-pytess.pytesseract.tesseract_cmd = r'"C:\tess\tesseract.exe"'
 
-image = cv2.imread("images/image99.jpg") #изображение авто
+image = cv2.imread("images/imagetesla.jpg") #изображение авто
 
 height, width, _ = image.shape #высота, ширина и профиль цвета изображения
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) #делаем изображение серым
@@ -51,7 +50,7 @@ for c in cnts:
     if area > 5000:
         img = image[y:y+h, x:x+w]
         result = pytess.image_to_string(img, lang="rus+eng")
-        if len(result) > 6:
+        if len(result) > 1:
             print(result)
 
 
@@ -63,5 +62,5 @@ aspect_ratio = width / height
 target_height = int(target_width / aspect_ratio)
 resized_image = cv2.resize(im, (target_width, target_height))
 
-cv2.imshow("Photo", resized_image) #выводим изображение
-cv2.waitKey()
+# cv2.imshow("Photo", resized_image) #выводим изображение
+# cv2.waitKey()
