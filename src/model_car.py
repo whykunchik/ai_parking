@@ -1,9 +1,31 @@
 import cv2
 import pytesseract as pytess
 from imutils import contours
+import os
+# C:\Program Files\Tesseract-OCR
 
+# Путь к Tesseract
+tesseract_path = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-pytess.pytesseract.tesseract_cmd = r'"C:\Program Files\Tesseract-OCR"'
+# Проверка
+if not os.path.exists(tesseract_path):
+    print(f"Файл не найден: {tesseract_path}")
+    # Проверим в PATH
+    try:
+        import subprocess
+        result = subprocess.run(['tesseract', '--version'], 
+                              capture_output=True, text=True)
+        print(f"Tesseract найден в PATH: {result.stdout}")
+        # Если в PATH, не указываем путь явно
+    except:
+        print("Tesseract не найден нигде!")
+        exit(1)
+else:
+    print(f"✓ Tesseract найден: {tesseract_path}")
+    pytess.pytesseract.tesseract_cmd = tesseract_path
+
+pytess.pytesseract.tesseract_cmd = tesseract_path
+pytess.pytesseract.tesseract_cmd = r'"C:\tess\tesseract.exe"'
 
 image = cv2.imread("images/image99.jpg") #изображение авто
 
@@ -34,12 +56,12 @@ for c in cnts:
 
 
 #уменьшаем фото
-im = image
+im = thresh
 target_width = 500
 height, width = im.shape[:2]
 aspect_ratio = width / height
 target_height = int(target_width / aspect_ratio)
 resized_image = cv2.resize(im, (target_width, target_height))
 
-cv2.imshow("Zhopa", resized_image) #выводим изображение
+cv2.imshow("Photo", resized_image) #выводим изображение
 cv2.waitKey()
