@@ -2,7 +2,7 @@ import cv2
 import pytesseract as pytess
 from imutils import contours
 import os
-# C:\Program Files\Tesseract-OCR
+from ultralytics import YOLO
 
 # Путь к Tesseract
 tesseract_path = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
