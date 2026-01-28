@@ -13,3 +13,4 @@ dataset = project.version(3).download("yolov8")
 print(f"Датасет скачан в: {dataset.location}")
 print(f"Путь к конфигу: {dataset.location}/data.yaml")
 "progsopre"
+
