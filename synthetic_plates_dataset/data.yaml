@@ -1,0 +1,10 @@
+
+path: C:\ai_parking_bobr\ai_parking\synthetic_plates_dataset
+train: images/train
+val: images/val
+
+nc: 1
+names: ['license_plate']
+
+author: Synthetic Dataset
+date: 2024
