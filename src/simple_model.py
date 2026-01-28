@@ -192,9 +192,7 @@ def show_with_matplotlib(image_path):
 # ========== ЗАПУСК ==========
 if __name__ == "__main__":
     # Способ 1: Простой вывод в консоль (рекомендуется)
-    print("="*60)
     print("СПОСОБ 1: Простое распознавание с сохранением файлов")
-    print("="*60)
     results = simple_yolo_ocr("images/image99.jpg", save_result=True)
     
     # Способ 2: Только текст
@@ -206,3 +204,46 @@ if __name__ == "__main__":
     # Способ 3: С отображением через matplotlib (нужно установить matplotlib)
     # pip install matplotlib
     # show_with_matplotlib("images/imagetesla.jpg")
+    # import cv2
+    # import matplotlib.pyplot as plt
+
+
+
+    #ВСЕ ВЫРЕЗАННЫЕ НОМЕРА
+    # def analyze_detected_plates():
+    #     """Анализ вырезанных номеров"""
+    #     import glob
+        
+    #     plate_files = glob.glob("detected_plate_*.jpg")
+        
+    #     if not plate_files:
+    #         print("❌ Файлы номеров не найдены!")
+    #         return
+        
+    #     print(f"✅ Найдено {len(plate_files)} файлов номеров")
+        
+    #     for i, plate_file in enumerate(plate_files[:3]):  # покажем первые 3
+    #         img = cv2.imread(plate_file)
+            
+    #         if img is None:
+    #             print(f"  ❌ Не удалось загрузить {plate_file}")
+    #             continue
+            
+    #         h, w = img.shape[:2]
+    #         print(f"\n  📊 {plate_file}: {w}x{h} пикселей")
+            
+    #         # Проверяем размер - должен быть достаточно большим
+    #         if w < 100 or h < 30:
+    #             print(f"  ⚠️  СЛИШКОМ МАЛЕНЬКИЙ! Минимум 100x30 пикселей")
+            
+    #         # Покажем изображение (если установлен matplotlib)
+    #         try:
+    #             plt.figure(figsize=(10, 3))
+    #             plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    #             plt.title(f"Номер {i+1}: {w}x{h}")
+    #             plt.axis('off')
+    #             plt.show()
+    #         except:
+    #             pass
+
+    # analyze_detected_plates()
