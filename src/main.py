@@ -13,4 +13,5 @@ if __name__ == "__main__":
     main()
 
     print("popa")
-    print(1)
+    print(2)
+    print("Test 3")
