@@ -13,3 +13,4 @@ if __name__ == "__main__":
     main()
 
     print("popa")
+    print(1)
