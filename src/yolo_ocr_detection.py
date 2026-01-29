@@ -13,5 +13,3 @@ pytess.pytesseract.tesseract_cmd = tesseract_path
 results = simple_yolo_ocr("images/imagetesla.jpg", save_result=True)
 use_easyocr("images/car_images/detected_plate_0_1.jpg", False)
     
-
-
