@@ -24,3 +24,41 @@ from django.db.models import Sum, Count
 from datetime import datetime, timedelta
 # datetime - работа с датой/временем
 # timedelta - разница во времени
+
+# Функция входа
+def login_view(request):
+    # Если POST-запрос (пользователь отправил форму)
+    if request.method == 'POST':
+        # Создаем форму с данными из POST
+        form = AuthenticationForm(request, data=request.POST)
+        
+        # Проверяем валидность формы
+        if form.is_valid():
+            # Извлекаем очищенные данные
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            
+            # Аутентифицируем пользователя
+            user = authenticate(username=username, password=password)
+            
+            # Если пользователь существует
+            if user is not None:
+                # Входим в пользователя (создает сессию)
+                login(request, user)
+                
+                # Добавляем сообщение об успехе
+                messages.success(request, f"Добро пожаловать, {username}!")
+                
+                # Проверяем, является ли пользователь администратором
+                if user.is_staff:
+                    return redirect('admin_dashboard')  # Перенаправляем админа
+                else:
+                    return redirect('user_dashboard')  # Перенаправляем обычного пользователя
+            else:
+                messages.error(request, "Неверное имя пользователя или пароль.")
+        else:
+            messages.error(request, "Неверное имя пользователя или пароль.")
+    
+    # Если GET-запрос или ошибка - показываем пустую форму
+    form = AuthenticationForm()
+    return render(request, 'users/login.html', {'form': form})
