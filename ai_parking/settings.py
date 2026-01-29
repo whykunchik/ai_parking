@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-r^myxz8$jx_i8pmn0$cec8n#h4=-n78n*)j4u2dg!$h5hon+rx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'catalog.apps.CatalogConfig',
+    'catalog',                        # Наше приложение для каталога
+    'users',                          # Наше приложение для пользователей
 ]
 
 MIDDLEWARE = [
@@ -55,7 +57,7 @@ ROOT_URLCONF = 'ai_parking.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],  # Глобальная папка для шаблонов,
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -123,3 +125,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']  # Дополнительные папки со статикой
+
+# Настройки медиа-файлов (загружаемые пользователями)
+MEDIA_URL = '/media/'  # URL-префикс для медиа
+MEDIA_ROOT = BASE_DIR / 'media'  # Папка для хранения медиа
+
+# Настройки аутентификации
+LOGIN_URL = '/users/login/'  # URL для входа (если требуется аутентификация)
+LOGIN_REDIRECT_URL = '/'  # Куда перенаправлять после успешного входа
+LOGOUT_REDIRECT_URL = '/'  # Куда перенаправлять после выхода
