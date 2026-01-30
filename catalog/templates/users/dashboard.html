@@ -1,1 +1,61 @@
-
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель управления - Система управления парковкой</title>
+</head>
+<body>
+    <div>
+        <h1>Система управления парковкой</h1>
+        <div>
+            <span>{{ user.username }}</span>
+            <a href="{% url 'home' %}">Выйти</a>
+        </div>
+    </div>
+    
+    <div>
+        <h2>Добро пожаловать, {{ full_name }}!</h2>
+        <p>Имя пользователя: {{ user.username }}</p>
+        <p>Email: {{ user.email|default:"Не указан" }}</p>
+        <p>Статус: {% if user.is_staff %}Администратор{% else %}Пользователь{% endif %}</p>
+    </div>
+    
+    <div>
+        <div>
+            <h3>Мои автомобили</h3>
+            <p>Управление транспортными средствами</p>
+            <a href="#">Перейти</a>
+        </div>
+        
+        <div>
+            <h3>Парковочные сессии</h3>
+            <p>Информация о парковках</p>
+            <a href="#">Просмотреть</a>
+        </div>
+        
+        <div>
+            <h3>Платежи</h3>
+            <p>История платежей</p>
+            <a href="#">Оплатить</a>
+        </div>
+        
+        <div>
+            <h3>Настройки</h3>
+            <p>Управление профилем</p>
+            <a href="#">Настроить</a>
+        </div>
+    </div>
+    
+    {% if user.is_staff %}
+    <div>
+        <a href="{% url 'admin_dashboard' %}">Административная панель</a>
+        <a href="/admin/">Django Админка</a>
+    </div>
+    {% endif %}
+    
+    <div>
+        <p>© 2026 Система управления парковкой</p>
+        <a href="{% url 'home' %}">Вернуться на главную страницу</a>
+    </div>
+</body>
+</html>
