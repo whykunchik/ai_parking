@@ -62,3 +62,36 @@ def login_view(request):
     # Если GET-запрос или ошибка - показываем пустую форму
     form = AuthenticationForm()
     return render(request, 'users/login.html', {'form': form})
+ 
+@login_required
+def user_dashboard_view(request):
+    """Панель управления для обычных пользователей"""
+    user = request.user
+    context = {
+        'user': user,
+        'full_name': user.get_full_name() or user.username,
+    }
+    return render(request, 'users/dashboard.html', context)
+
+@login_required
+def admin_dashboard_view(request):
+    """Панель управления для администраторов"""
+    if not request.user.is_staff:
+        messages.error(request, "Доступ запрещен")
+        return redirect('dashboard')
+    
+    # Статистика для админ-панели
+    today = datetime.now().date()
+    
+    context = {
+        'user': request.user,
+        'today': today,
+        'total_parking_sessions': ParkingSession.objects.count(),
+        'active_sessions': ParkingSession.objects.filter(exit_time__isnull=True).count(),
+        'total_revenue': Payment.objects.aggregate(Sum('amount'))['amount__sum'] or 0,
+        'today_sessions': ParkingSession.objects.filter(
+            entry_time__date=today
+        ).count(),
+    }
+    
+    return render(request, 'admin/dashboard.html', context)

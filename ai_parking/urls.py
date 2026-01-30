@@ -19,9 +19,12 @@ from django.urls import path
 
 from django.urls import include
 from django.views.generic import TemplateView
+from catalog.views import login_view, user_dashboard_view, admin_dashboard_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', include('django.contrib.auth.urls')),
+    path('login/', login_view, name='login'),
+    path('dashboard/', user_dashboard_view, name='dashboard'),
+    path('admin-dashboard/', admin_dashboard_view, name='admin_dashboard'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]
