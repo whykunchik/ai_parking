@@ -101,6 +101,7 @@ class Tariff(models.Model):
 class LicensePlateDetection(models.Model):
     license_plate = models.CharField(max_length=15)  # Распознанный номер
     image_path = models.CharField(max_length=255, blank=True, null=True)  # Путь к изображению
+    detection_time = models.DateTimeField(auto_now_add=True)
     
     class Meta:
         verbose_name = 'Распознанный номер'
