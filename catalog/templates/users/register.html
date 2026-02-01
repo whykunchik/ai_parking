@@ -1,0 +1,78 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - Система управления парковкой</title>
+</head>
+<body>
+    <h1>Регистрация нового пользователя</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div>
+            <h3>Основная информация</h3>
+            
+            <div>
+                <label for="id_username">Имя пользователя:</label>
+                {{ form.username }}
+                {% if form.username.errors %}
+                <div>{{ form.username.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="id_first_name">Имя:</label>
+                {{ form.first_name }}
+            </div>
+            
+            <div>
+                <label for="id_last_name">Фамилия:</label>
+                {{ form.last_name }}
+            </div>
+            
+            <div>
+                <label for="id_email">Email:</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                <div>{{ form.email.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="id_phone">Телефон:</label>
+                {{ form.phone }}
+            </div>
+        </div>
+        
+        <div>
+            <h3>Пароль</h3>
+            
+            <div>
+                <label for="id_password1">Пароль:</label>
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                <div>{{ form.password1.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div>
+                <label for="id_password2">Подтверждение пароля:</label>
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                <div>{{ form.password2.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div>
+            <button type="submit">Зарегистрироваться</button>
+        </div>
+    </form>
+    
+    <div>
+        <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войдите здесь</a></p>
+        <a href="{% url 'home' %}">Вернуться на главную страницу</a>
+    </div>
+</body>
+</html>
