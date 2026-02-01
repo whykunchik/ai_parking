@@ -55,7 +55,7 @@ def login_view(request):
                 if user.is_staff:
                     return redirect('admin_dashboard')  # Перенаправляем админа
                 else:
-                    return redirect('user_dashboard')  # Перенаправляем обычного пользователя
+                    return redirect('dashboard')  # Перенаправляем обычного пользователя
             else:
                 messages.error(request, "Неверное имя пользователя или пароль.")
         else:
