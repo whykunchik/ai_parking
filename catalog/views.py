@@ -24,6 +24,8 @@ from django.db.models import Sum, Count
 from datetime import datetime, timedelta
 # datetime - работа с датой/временем
 # timedelta - разница во времени
+from .forms import UserRegistrationForm
+# Импортируем форму
 
 # Функция входа
 def login_view(request):
@@ -95,3 +97,17 @@ def admin_dashboard_view(request):
     }
     
     return render(request, 'admin/dashboard.html', context)
+
+def register_view(request):
+    """Представление для регистрации пользователя"""
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # Автоматически входим после регистрации
+            messages.success(request, f'Аккаунт создан для {user.username}!')
+            return redirect('dashboard')
+    else:
+        form = UserRegistrationForm()
+    
+    return render(request, 'users/register.html', {'form': form})

@@ -21,7 +21,6 @@ class UserRegistrationForm(UserCreationForm):
         
         if commit:
             user.save()
-            # Создаем профиль CarOwner
             CarOwner.objects.create(
                 user=user,
                 phone=self.cleaned_data['phone']
