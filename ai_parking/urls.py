@@ -19,13 +19,19 @@ from django.urls import path
 
 from django.urls import include
 from django.views.generic import TemplateView
-from catalog.views import login_view, user_dashboard_view, admin_dashboard_view, register_view
-
+from catalog.views import (
+    login_view, user_dashboard_view, admin_dashboard_view, 
+    register_view, my_vehicles_view, parking_sessions_view, 
+    payments_view
+)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', login_view, name='login'),
     path('register/', register_view, name='register'),
     path('dashboard/', user_dashboard_view, name='dashboard'),
     path('admin-dashboard/', admin_dashboard_view, name='admin_dashboard'),
+    path('my-vehicles/', my_vehicles_view, name='my_vehicles'),
+    path('parking-sessions/', parking_sessions_view, name='parking_sessions'),
+    path('payments/', payments_view, name='payments'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]
