@@ -22,13 +22,14 @@ from django.views.generic import TemplateView, RedirectView
 from catalog.views import (
     login_view, user_dashboard_view, admin_dashboard_view, 
     register_view, my_vehicles_view, parking_sessions_view, 
-    payments_view
+    payments_view, logout_view  
 )
 urlpatterns = [
     path('catalog/', RedirectView.as_view(url='/', permanent=True)),
     path('admin/', admin.site.urls),
     path('login/', login_view, name='login'),
     path('register/', register_view, name='register'),
+    path('logout/', logout_view, name='logout'),
     path('dashboard/', user_dashboard_view, name='dashboard'),
     path('admin-dashboard/', admin_dashboard_view, name='admin_dashboard'),
     path('my-vehicles/', my_vehicles_view, name='my_vehicles'),
