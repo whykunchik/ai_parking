@@ -1,0 +1,37 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Система управления парковкой{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>Система управления парковкой AI-Parking</h1>
+        <nav>
+            {% block navigation %}
+            {% if user.is_authenticated %}
+                <span>Пользователь: {{ user.username }}</span>
+                <a href="{% url 'home' %}">Главная</a>
+                <a href="{% url 'dashboard' %}">Панель управления</a>
+                <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
+            {% else %}
+                <a href="{% url 'home' %}">Главная</a>
+                <a href="{% url 'login' %}">Войти</a>
+                <a href="{% url 'register' %}">Регистрация</a>
+            {% endif %}
+            {% endblock %}
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        {% block footer %}
+        <p>© 2026 Система управления парковкой AI-Parking</p>
+        {% endblock %}
+    </footer>
+</body>
+</html>

@@ -26,6 +26,7 @@ from datetime import datetime, timedelta
 # timedelta - разница во времени
 from .forms import UserRegistrationForm
 # Импортируем форму
+from django.contrib.auth import logout as auth_logout
 
 # Функция входа
 def login_view(request):
@@ -123,10 +124,14 @@ def my_vehicles_view(request):
         vehicles = []
         car_owner = None
     
+    from datetime import datetime
+    current_time = datetime.now()
+    
     context = {
         'vehicles': vehicles,
         'car_owner': car_owner,
-        'vehicle_count': vehicles.count(),
+        'vehicle_count': vehicles.count(), # type: ignore
+        'current_time': current_time,
     }
     return render(request, 'users/my_vehicles.html', context)
 
@@ -157,7 +162,7 @@ def parking_sessions_view(request):
         'parking_sessions': parking_sessions,
         'active_sessions': active_sessions,
         'total_spent': total_spent,
-        'session_count': parking_sessions.count(),
+        'session_count': parking_sessions.count(), # type: ignore
     }
     return render(request, 'users/parking_sessions.html', context)
 
@@ -186,7 +191,12 @@ def payments_view(request):
     context = {
         'payments': payments,
         'total_paid': total_paid,
-        'payment_count': payments.count(),
-        'successful_count': successful_payments.count(),
+        'payment_count': payments.count(), # type: ignore
+        'successful_count': successful_payments.count(), # type: ignore
     }
     return render(request, 'users/payments.html', context)
+
+def logout_view(request):
+    """Представление для выхода из системы"""
+    auth_logout(request)
+    return redirect('home')
