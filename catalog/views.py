@@ -112,3 +112,81 @@ def register_view(request):
     
     return render(request, 'users/register.html', {'form': form})
 
+@login_required
+def my_vehicles_view(request):
+    """Страница с автомобилями пользователя"""
+    try:
+        # Получаем CarOwner текущего пользователя
+        car_owner = CarOwner.objects.get(user=request.user)
+        vehicles = Vehicle.objects.filter(owner=car_owner)
+    except CarOwner.DoesNotExist:
+        vehicles = []
+        car_owner = None
+    
+    context = {
+        'vehicles': vehicles,
+        'car_owner': car_owner,
+        'vehicle_count': vehicles.count(),
+    }
+    return render(request, 'users/my_vehicles.html', context)
+
+@login_required
+def parking_sessions_view(request):
+    """Страница с парковочными сессиями пользователя"""
+    try:
+        car_owner = CarOwner.objects.get(user=request.user)
+        # Получаем все автомобили пользователя
+        user_vehicles = Vehicle.objects.filter(owner=car_owner)
+        # Получаем парковочные сессии для этих автомобилей
+        parking_sessions = ParkingSession.objects.filter(
+            vehicle__in=user_vehicles
+        ).order_by('-entry_time')
+        
+        # Статистика
+        active_sessions = parking_sessions.filter(exit_time__isnull=True)
+        total_spent = parking_sessions.aggregate(
+            total=Sum('total_cost')
+        )['total'] or 0
+        
+    except CarOwner.DoesNotExist:
+        parking_sessions = []
+        active_sessions = []
+        total_spent = 0
+    
+    context = {
+        'parking_sessions': parking_sessions,
+        'active_sessions': active_sessions,
+        'total_spent': total_spent,
+        'session_count': parking_sessions.count(),
+    }
+    return render(request, 'users/parking_sessions.html', context)
+
+@login_required
+def payments_view(request):
+    """Страница с платежами пользователя"""
+    try:
+        car_owner = CarOwner.objects.get(user=request.user)
+        # Получаем все парковочные сессии пользователя
+        user_vehicles = Vehicle.objects.filter(owner=car_owner)
+        user_sessions = ParkingSession.objects.filter(vehicle__in=user_vehicles)
+        # Получаем платежи для этих сессий
+        payments = Payment.objects.filter(
+            parking_session__in=user_sessions
+        ).order_by('-payment_date')
+        
+        # Статистика
+        total_paid = payments.aggregate(total=Sum('amount'))['total'] or 0
+        successful_payments = payments.filter(is_successful=True)
+        
+    except CarOwner.DoesNotExist:
+        payments = []
+        total_paid = 0
+        successful_payments = []
+    
+    context = {
+        'payments': payments,
+        'total_paid': total_paid,
+        'payment_count': payments.count(),
+        'successful_count': successful_payments.count(),
+    }
+    return render(request, 'users/payments.html', context)

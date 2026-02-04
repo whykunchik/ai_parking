@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../../../../ai_park"
+		},
+		{
+			"name": "ai_parking",
+			"path": "../../../.."
+		}
+	],
+	"settings": {}
+}

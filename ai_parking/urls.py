@@ -18,13 +18,14 @@ from django.contrib import admin
 from django.urls import path
 
 from django.urls import include
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from catalog.views import (
     login_view, user_dashboard_view, admin_dashboard_view, 
     register_view, my_vehicles_view, parking_sessions_view, 
     payments_view
 )
 urlpatterns = [
+    path('catalog/', RedirectView.as_view(url='/', permanent=True)),
     path('admin/', admin.site.urls),
     path('login/', login_view, name='login'),
     path('register/', register_view, name='register'),
