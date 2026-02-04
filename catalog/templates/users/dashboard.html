@@ -1,24 +1,22 @@
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель управления - Система управления парковкой</title>
-</head>
-<body>
-    <div>
-        <h1>Система управления парковкой</h1>
-        <div>
-            <span>{{ user.username }}</span>
-            <a href="{% url 'home' %}">Выйти</a>
-        </div>
-    </div>
-    
-    <div>
-        <h2>Добро пожаловать, {{ full_name }}!</h2>
-        <p>Имя пользователя: {{ user.username }}</p>
-        <p>Email: {{ user.email|default:"Не указан" }}</p>
-        <p>Статус: {% if user.is_staff %}Администратор{% else %}Пользователь{% endif %}</p>
-    </div>
+{% extends 'base.html' %}
+
+{% block title %}Панель управления - Система управления парковкой{% endblock %}
+
+{% block navigation %}
+    <span>Пользователь: {{ user.username }}</span>
+    <a href="{% url 'home' %}">Главная</a>
+    <a href="{% url 'dashboard' %}">Панель управления</a>
+    <a href="{% url 'my_vehicles' %}">Мои автомобили</a>
+    <a href="{% url 'parking_sessions' %}">Парковочные сессии</a>
+    <a href="{% url 'payments' %}">Платежи</a>
+    <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
+{% endblock %}
+
+{% block content %}
+    <h2>Добро пожаловать, {{ full_name }}!</h2>
+    <p>Имя пользователя: {{ user.username }}</p>
+    <p>Email: {{ user.email|default:"Не указан" }}</p>
+    <p>Статус: {% if user.is_staff %}Администратор{% else %}Пользователь{% endif %}</p>
     
     <div>
         <div>
@@ -38,12 +36,6 @@
             <p>История платежей</p>
             <a href="{% url 'payments' %}">Оплатить</a>
         </div>
-        
-        <div>
-            <h3>Настройки</h3>
-            <p>Управление профилем</p>
-            <a href="#">Настроить</a>
-        </div>
     </div>
     
     {% if user.is_staff %}
@@ -52,10 +44,4 @@
         <a href="/admin/">Django Админка</a>
     </div>
     {% endif %}
-    
-    <div>
-        <p>© 2026 Система управления парковкой</p>
-        <a href="{% url 'home' %}">Вернуться на главную страницу</a>
-    </div>
-</body>
-</html>
+{% endblock %}

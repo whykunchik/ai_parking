@@ -1,58 +1,65 @@
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Мои автомобили - Система управления парковкой</title>
-</head>
-<body>
-    <div>
-        <h1>Система управления парковкой</h1>
-        <div>
-            <span>{{ user.username }}</span>
-            <a href="{% url 'dashboard' %}">Панель управления</a>
-            <a href="{% url 'home' %}">Выйти</a>
-        </div>
-    </div>
+{% extends 'base.html' %}
+
+{% block title %}Мои автомобили - Система управления парковкой{% endblock %}
+
+{% block navigation %}
+    <span>Пользователь: {{ user.username }}</span>
+    <a href="{% url 'home' %}">Главная</a>
+    <a href="{% url 'dashboard' %}">Панель управления</a>
+    <a href="{% url 'my_vehicles' %}">Мои автомобили</a>
+    <a href="{% url 'parking_sessions' %}">Парковочные сессии</a>
+    <a href="{% url 'payments' %}">Платежи</a>
+    <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
+{% endblock %}
+
+{% block content %}
+    <h2>Мои автомобили</h2>
     
     <div>
-        <h2>Мои автомобили</h2>
+        <a href="{% url 'dashboard' %}">Назад в панель управления</a>
+    </div>
+    
+    {% if car_owner %}
+        <p>У вас зарегистрировано автомобилей: {{ vehicle_count }}</p>
+        
+        {% if vehicles %}
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Гос. номер</th>
+                        <th>Марка</th>
+                        <th>Модель</th>
+                        <th>Цвет</th>
+                        <th>Год</th>
+                        <th>Тип</th>
+                        <th>Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vehicle in vehicles %}
+                    <tr>
+                        <td>{{ vehicle.state_number }}</td>
+                        <td>{{ vehicle.brand }}</td>
+                        <td>{{ vehicle.model }}</td>
+                        <td>{{ vehicle.color }}</td>
+                        <td>{{ vehicle.year }}</td>
+                        <td>{{ vehicle.get_vehicle_type_display }}</td>
+                        <td>{% if vehicle.is_active %}Активен{% else %}Неактивен{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>У вас еще нет зарегистрированных автомобилей.</p>
+        {% endif %}
         
         <div>
-            <a href="{% url 'dashboard' %}">Назад в панель управления</a>
+            <h3>Добавить новый автомобиль</h3>
+            <p>Для добавления нового автомобиля обратитесь к администратору системы.</p>
         </div>
-        
-        {% if car_owner %}
-            <p>У вас зарегистрировано автомобилей: {{ vehicle_count }}</p>
-            
-            {% if vehicles %}
-                <table border="1">
-                    <thead>
-                        <tr>
-                            <th>Гос. номер</th>
-                            <th>Статус</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for vehicle in vehicles %}
-                        <tr>
-                            <td>{{ vehicle.state_number }}</td>
-                            <td>{% if vehicle.id %}Активен{% else %}Неактивен{% endif %}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>У вас еще нет зарегистрированных автомобилей.</p>
-            {% endif %}
-            
-            <div>
-                <h3>Добавить новый автомобиль</h3>
-                <p>Для добавления нового автомобиля обратитесь к администратору системы.</p>
-            </div>
-        {% else %}
-            <p>У вас не заполнен профиль владельца автомобиля. Обратитесь к администратору.</p>
-        {% endif %}
-    </div>
+    {% else %}
+        <p>У вас не заполнен профиль владельца автомобиля. Обратитесь к администратору.</p>
+    {% endif %}
     
     <div>
         <h3>Навигация</h3>
@@ -62,9 +69,4 @@
             <a href="{% url 'dashboard' %}">Панель управления</a>
         </p>
     </div>
-    
-    <footer>
-        <p>© 2026 Система управления парковкой</p>
-    </footer>
-</body>
-</html>
+{% endblock %}

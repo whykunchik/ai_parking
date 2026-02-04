@@ -1,41 +1,37 @@
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Административная панель</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}Административная панель{% endblock %}
+
+{% block navigation %}
+    <span>Администратор: {{ user.username }}</span>
+    <a href="{% url 'dashboard' %}">Пользовательская панель</a>
+    <a href="/admin/">Django Admin</a>
+    <a href="{% url 'home' %}">Главная</a>
+    <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
+{% endblock %}
+
+{% block content %}
+    <h2>Общая статистика</h2>
     <div>
         <div>
-            <a href="{% url 'dashboard' %}">Пользовательская панель</a>
-            <a href="/admin/">Django Admin</a>
-            <a href="{% url 'home' %}">Главная</a>
+            <h3>Всего парковок</h3>
+            <div>{{ total_parking_sessions }}</div>
+            <div>за все время</div>
         </div>
-    </div>
-    
-    <div>
-        <h2>Общая статистика</h2>
         <div>
-            <div>
-                <h3>Всего парковок</h3>
-                <div>{{ total_parking_sessions }}</div>
-                <div>за все время</div>
-            </div>
-            <div>
-                <h3>Активные парковки</h3>
-                <div>{{ active_sessions }}</div>
-                <div>на текущий момент</div>
-            </div>
-            <div>
-                <h3>Общий доход</h3>
-                <div>{{ total_revenue }} ₽</div>
-                <div>за все время</div>
-            </div>
-            <div>
-                <h3>Парковки сегодня</h3>
-                <div>{{ today_sessions }}</div>
-                <div>за {{ today }}</div>
-            </div>
+            <h3>Активные парковки</h3>
+            <div>{{ active_sessions }}</div>
+            <div>на текущий момент</div>
+        </div>
+        <div>
+            <h3>Общий доход</h3>
+            <div>{{ total_revenue }} ₽</div>
+            <div>за все время</div>
+        </div>
+        <div>
+            <h3>Парковки сегодня</h3>
+            <div>{{ today_sessions }}</div>
+            <div>за {{ today }}</div>
         </div>
     </div>
     
@@ -53,16 +49,14 @@
         <h2>Быстрые ссылки</h2>
         <div>
             <a href="/admin/catalog/carowner/">Владельцы автомобилей</a>
-            <a href="/admin/catalog/tariff/">Тарифы</a>
             <a href="/admin/catalog/licenseplatedetection/">Распознанные номера</a>
             <a href="/admin/catalog/parkingsession/?exit_time__isnull=True">Активные парковки</a>
             <a href="/admin/catalog/payment/?is_successful=False">Неуспешные платежи</a>
             <a href="/admin/">Полная админ-панель</a>
         </div>
     </div>
-    
-    <div>
-        <p>© 2026 Административная панель | Пользователь: {{ user.username }}</p>
-    </div>
-</body>
-</html>
+{% endblock %}
+
+{% block footer %}
+    <p>© 2026 Административная панель | Пользователь: {{ user.username }}</p>
+{% endblock %}
