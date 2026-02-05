@@ -15,7 +15,7 @@
     <div class="col">
         <div class="card text-center">
             <h2>Административная панель</h2>
-            <p class="text-muted">Управление системой AI-Parking</p>
+            <p class="text-muted">Управление системой</p>
         </div>
     </div>
 </div>
@@ -64,26 +64,29 @@
 <div class="row mt-4">
     <div class="col">
         <div class="card">
-            <h3>Быстрые действия</h3>
+            <h3>Быстрые ссылки</h3>
             <div class="row mt-3">
                 <div class="col">
-                    <a href="/admin/catalog/vehicle/" class="btn btn-secondary">
-                        Управление автомобилями
+                    <a href="/admin/catalog/carowner/" class="btn">
+                        Владельцы автомобилей →
                     </a>
                 </div>
                 <div class="col">
-                    <a href="/admin/catalog/parkingsession/" class="btn btn-secondary">
-                        Парковочные сессии
+                    <a href="/admin/catalog/licenseplatedetection/" class="btn">
+                        Распознанные номера →
+                    </a>
+                </div>
+            </div>
+            
+            <div class="row mt-2">
+                <div class="col">
+                    <a href="/admin/catalog/payment/?is_successful=False" class="btn">
+                        Неуспешные платежи →
                     </a>
                 </div>
                 <div class="col">
-                    <a href="/admin/catalog/payment/" class="btn btn-secondary">
-                        Платежи и финансы
-                    </a>
-                </div>
-                <div class="col">
-                    <a href="/admin/auth/user/" class="btn btn-secondary">
-                        Управление пользователями
+                    <a href="/admin/" class="btn">
+                        Полная админ-панель →
                     </a>
                 </div>
             </div>
@@ -94,34 +97,16 @@
 <div class="row mt-4">
     <div class="col">
         <div class="card">
-            <h3>Быстрые ссылки</h3>
+            <h3>Быстрые действия</h3>
             <div class="row mt-3">
                 <div class="col">
-                    <a href="/admin/catalog/carowner/" class="btn">
-                        Владельцы автомобилей
+                    <a href="/admin/catalog/payment/" class="btn btn-secondary">
+                        Платежи
                     </a>
                 </div>
                 <div class="col">
-                    <a href="/admin/catalog/licenseplatedetection/" class="btn">
-                        Распознанные номера
-                    </a>
-                </div>
-            </div>
-            
-            <div class="row mt-2">
-                <div class="col">
-                    <a href="/admin/catalog/parkingsession/?exit_time__isnull=True" class="btn">
-                        Активные парковки
-                    </a>
-                </div>
-                <div class="col">
-                    <a href="/admin/catalog/payment/?is_successful=False" class="btn">
-                        Неуспешные платежи
-                    </a>
-                </div>
-                <div class="col">
-                    <a href="/admin/" class="btn">
-                        Полная админ-панель
+                    <a href="/admin/auth/user/" class="btn btn-secondary">
+                        Управление пользователями
                     </a>
                 </div>
             </div>
