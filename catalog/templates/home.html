@@ -2,49 +2,85 @@
 
 {% block title %}Главная - Система управления парковкой{% endblock %}
 
-{% block navigation %}
-    {% if user.is_authenticated %}
-        <span>Пользователь: {{ user.username }}</span>
-        <a href="{% url 'dashboard' %}">Панель управления</a>
-        <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
-    {% else %}
-        <a href="{% url 'home' %}">Главная</a>
-        <a href="{% url 'login' %}">Войти</a>
-        <a href="{% url 'register' %}">Регистрация</a>
-    {% endif %}
-{% endblock %}
-
 {% block content %}
-    <div>
-        <h2>Для доступа к системе необходимо:</h2>
-        
-        <div>
-            <h3>Новый пользователь?</h3>
-            <p>Зарегистрируйтесь для получения доступа к системе</p>
-            <a href="{% url 'register' %}">Зарегистрироваться</a>
+    <div class="card text-center">
+        <h2>Добро пожаловать в систему!</h2>
+        <p class="mt-2">Интеллектуальная система управления парковочными местами с автоматическим распознаванием номеров</p>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col">
+            <div class="feature-card text-center">
+                <h3>Для пользователей</h3>
+                <p>Быстрый доступ к своим автомобилям, истории парковок и платежам</p>
+                {% if not user.is_authenticated %}
+                    <div class="mt-3">
+                        <a href="{% url 'login' %}" class="btn">Войти в систему</a>
+                        <a href="{% url 'register' %}" class="btn btn-secondary">Зарегистрироваться</a>
+                    </div>
+                {% else %}
+                    <div class="mt-3">
+                        <a href="{% url 'dashboard' %}" class="btn">Перейти в панель управления</a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
         
-        <div>
-            <h3>Уже есть аккаунт?</h3>
-            <p>Войдите в систему для доступа к панели управления</p>
-            <a href="{% url 'login' %}">Войти в систему</a>
-        </div>
-        
-        <div>
-            <h3>Администратор?</h3>
-            <p>Доступ к административной панели</p>
-            <a href="/admin/">Админ-панель</a>
+        <div class="col">
+            <div class="feature-card text-center">
+                <h3>Для администраторов</h3>
+                <p>Полный контроль над парковочной системой, статистика и управление</p>
+                <div class="mt-3">
+                    <a href="/admin/" class="btn">Админ-панель</a>
+                </div>
+            </div>
         </div>
     </div>
     
-    <div>
-        <h2>О системе:</h2>
-        <ul>
-            <li>Автоматическое распознавание номеров</li>
-            <li>Управление парковочными местами</li>
-            <li>Онлайн оплата парковки</li>
-            <li>История парковочных сессий</li>
-            <li>Уведомления и статистика</li>
-        </ul>
+    <div class="card mt-4">
+        <h2>Возможности системы</h2>
+        <div class="row mt-3">
+            <div class="col">
+                <h4>Автоматическое распознавание</h4>
+                <ul>
+                    <li>Распознавание номерных знаков</li>
+                    <li>Автоматический въезд/выезд</li>
+                    <li>База данных автомобилей</li>
+                </ul>
+            </div>
+            <div class="col">
+                <h4>Удобная оплата</h4>
+                <ul>
+                    <li>Онлайн оплата парковки</li>
+                    <li>Различные способы оплаты</li>
+                    <li>Автоматические квитанции</li>
+                </ul>
+            </div>
+            <div class="col">
+                <h4>Управление и аналитика</h4>
+                <ul>
+                    <li>Контроль занятости мест</li>
+                    <li>Финансовая статистика</li>
+                    <li>Отчеты и аналитика</li>
+                </ul>
+            </div>
+        </div>
     </div>
+    
+    {% if user.is_authenticated %}
+    <div class="card mt-4">
+        <div class="row">
+            <div class="col">
+                <h3>Вы уже авторизованы!</h3>
+                <p>Добро пожаловать, <strong>{{ user.username }}</strong>! Вы можете перейти в панель управления для работы с системой.</p>
+                <div class="mt-3">
+                    <a href="{% url 'dashboard' %}" class="btn">Панель управления</a>
+                    {% if user.is_staff %}
+                    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">Админ-панель</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 {% endblock %}

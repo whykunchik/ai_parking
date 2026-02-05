@@ -11,52 +11,134 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Общая статистика</h2>
-    <div>
-        <div>
-            <h3>Всего парковок</h3>
-            <div>{{ total_parking_sessions }}</div>
-            <div>за все время</div>
-        </div>
-        <div>
-            <h3>Активные парковки</h3>
-            <div>{{ active_sessions }}</div>
-            <div>на текущий момент</div>
-        </div>
-        <div>
-            <h3>Общий доход</h3>
-            <div>{{ total_revenue }} ₽</div>
-            <div>за все время</div>
-        </div>
-        <div>
-            <h3>Парковки сегодня</h3>
-            <div>{{ today_sessions }}</div>
-            <div>за {{ today }}</div>
+<div class="row">
+    <div class="col">
+        <div class="card text-center">
+            <h2>Административная панель</h2>
+            <p class="text-muted">Управление системой AI-Parking</p>
         </div>
     </div>
-    
-    <div>
-        <h2>Быстрые действия</h2>
-        <div>
-            <a href="/admin/catalog/vehicle/">Управление автомобилями</a>
-            <a href="/admin/catalog/parkingsession/">Парковочные сессии</a>
-            <a href="/admin/catalog/payment/">Платежи и финансы</a>
-            <a href="/admin/auth/user/">Управление пользователями</a>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <div class="card">
+            <h3>Общая статистика</h3>
+            <div class="row mt-3">
+                <div class="col">
+                    <div class="card text-center">
+                        <h4>Всего парковок</h4>
+                        <p class="stat-number">{{ total_parking_sessions }}</p>
+                        <p class="text-muted">за все время</p>
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="card text-center">
+                        <h4>Активные парковки</h4>
+                        <p class="stat-number">{{ active_sessions }}</p>
+                        <p class="text-muted">на текущий момент</p>
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="card text-center">
+                        <h4>Общий доход</h4>
+                        <p class="stat-number">{{ total_revenue }} ₽</p>
+                        <p class="text-muted">за все время</p>
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="card text-center">
+                        <h4>Парковки сегодня</h4>
+                        <p class="stat-number">{{ today_sessions }}</p>
+                        <p class="text-muted">за {{ today }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <div>
-        <h2>Быстрые ссылки</h2>
-        <div>
-            <a href="/admin/catalog/carowner/">Владельцы автомобилей</a>
-            <a href="/admin/catalog/licenseplatedetection/">Распознанные номера</a>
-            <a href="/admin/catalog/parkingsession/?exit_time__isnull=True">Активные парковки</a>
-            <a href="/admin/catalog/payment/?is_successful=False">Неуспешные платежи</a>
-            <a href="/admin/">Полная админ-панель</a>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <div class="card">
+            <h3>Быстрые действия</h3>
+            <div class="row mt-3">
+                <div class="col">
+                    <a href="/admin/catalog/vehicle/" class="btn btn-secondary" style="width: 100%;">
+                        Управление автомобилями
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="/admin/catalog/parkingsession/" class="btn btn-secondary" style="width: 100%;">
+                        Парковочные сессии
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="/admin/catalog/payment/" class="btn btn-secondary" style="width: 100%;">
+                        Платежи и финансы
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="/admin/auth/user/" class="btn btn-secondary" style="width: 100%;">
+                        Управление пользователями
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <div class="card">
+            <h3>Быстрые ссылки</h3>
+            <div class="row mt-3">
+                <div class="col">
+                    <a href="/admin/catalog/carowner/" class="btn" style="width: 100%;">
+                        Владельцы автомобилей
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="/admin/catalog/licenseplatedetection/" class="btn" style="width: 100%;">
+                        Распознанные номера
+                    </a>
+                </div>
+            </div>
+            
+            <div class="row mt-2">
+                <div class="col">
+                    <a href="/admin/catalog/parkingsession/?exit_time__isnull=True" class="btn" style="width: 100%;">
+                        Активные парковки
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="/admin/catalog/payment/?is_successful=False" class="btn" style="width: 100%;">
+                        Неуспешные платежи
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="/admin/" class="btn" style="width: 100%;">
+                        Полная админ-панель
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #4a9eff;
+    margin: 0.5rem 0;
+}
+</style>
 {% endblock %}
 
 {% block footer %}
-    <p>© 2026 Административная панель | Пользователь: {{ user.username }}</p>
+    <p>2026 Административная панель | Пользователь: {{ user.username }} | Роль: Администратор</p>
 {% endblock %}

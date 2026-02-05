@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Платежи - Система управления парковкой{% endblock %}
+
+{% block navigation %}
+    <span>Пользователь: {{ user.username }}</span>
+    <a href="{% url 'home' %}">Главная</a>
+    <a href="{% url 'dashboard' %}">Панель управления</a>
+    <a href="{% url 'my_vehicles' %}">Мои автомобили</a>
+    <a href="{% url 'parking_sessions' %}">Парковочные сессии</a>
+    <a href="{% url 'payments' %}">Платежи</a>
+    <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <h2>Платежи</h2>
+            
+            <div class="mt-3">
+                <a href="{% url 'dashboard' %}" class="btn btn-secondary">← Назад в панель управления</a>
+            </div>
+            
+            <div class="row mt-3">
+                <div class="col">
+                    <div class="card text-center">
+                        <h4>Финансовая статистика</h4>
+                        <p><strong>Всего платежей:</strong> {{ payment_count }}</p>
+                        <p><strong>Успешных платежей:</strong> {{ successful_count }}</p>
+                        <p><strong>Общая сумма:</strong> <strong>{{ total_paid }} руб.</strong></p>
+                    </div>
+                </div>
+            </div>
+            
+            {% if payments %}
+            <div class="mt-3">
+                <h3>История платежей</h3>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Номер парковки</th>
+                                <th>Сумма</th>
+                                <th>Способ оплаты</th>
+                                <th>ID транзакции</th>
+                                <th>Статус</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in payments %}
+                            <tr>
+                                <td>{{ payment.payment_date|date:"d.m.Y H:i" }}</td>
+                                <td>#{{ payment.parking_session.id }}</td>
+                                <td><strong>{{ payment.amount }} руб.</strong></td>
+                                <td>{{ payment.get_payment_method_display }}</td>
+                                <td>
+                                    {% if payment.transaction_id %}
+                                        <code>{{ payment.transaction_id|truncatechars:15 }}</code>
+                                    {% else %}
+                                        <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if payment.is_successful %}
+                                        <span class="payment-success">Успешно</span>
+                                    {% else %}
+                                        <span class="payment-failed">Неуспешно</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-info mt-3">
+                <p>У вас еще нет платежей.</p>
+            </div>
+            {% endif %}
+            
+            <div class="card mt-3">
+                <h3>Оплатить парковку</h3>
+                <p>Для оплаты текущей парковки обратитесь к администратору или используйте терминал оплаты.</p>
+                <div class="row mt-2">
+                    <div class="col">
+                        <button class="btn" style="width: 100%;">Оплатить онлайн</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-secondary" style="width: 100%;">Терминал оплаты</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-3">
+                <h3>Навигация</h3>
+                <div class="row mt-2">
+                    <div class="col">
+                        <a href="{% url 'my_vehicles' %}" class="btn btn-secondary" style="width: 100%;">
+                            Мои автомобили
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="{% url 'parking_sessions' %}" class="btn btn-secondary" style="width: 100%;">
+                            Парковочные сессии
+                        </a>
+                    </div>
+                    <div class="col">
+                        <a href="{% url 'dashboard' %}" class="btn btn-secondary" style="width: 100%;">
+                            Панель управления
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

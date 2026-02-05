@@ -120,9 +120,11 @@ def my_vehicles_view(request):
         # Получаем CarOwner текущего пользователя
         car_owner = CarOwner.objects.get(user=request.user)
         vehicles = Vehicle.objects.filter(owner=car_owner)
+        vehicle_count = vehicles.count()
     except CarOwner.DoesNotExist:
         vehicles = []
         car_owner = None
+        vehicle_count = 0
     
     from datetime import datetime
     current_time = datetime.now()
@@ -130,7 +132,7 @@ def my_vehicles_view(request):
     context = {
         'vehicles': vehicles,
         'car_owner': car_owner,
-        'vehicle_count': vehicles.count(), # type: ignore
+        'vehicle_count': vehicle_count,
         'current_time': current_time,
     }
     return render(request, 'users/my_vehicles.html', context)
@@ -153,16 +155,19 @@ def parking_sessions_view(request):
             total=Sum('total_cost')
         )['total'] or 0
         
+        session_count = parking_sessions.count()
+        
     except CarOwner.DoesNotExist:
         parking_sessions = []
         active_sessions = []
         total_spent = 0
+        session_count = 0
     
     context = {
         'parking_sessions': parking_sessions,
         'active_sessions': active_sessions,
         'total_spent': total_spent,
-        'session_count': parking_sessions.count(), # type: ignore
+        'session_count': session_count,
     }
     return render(request, 'users/parking_sessions.html', context)
 
@@ -183,16 +188,21 @@ def payments_view(request):
         total_paid = payments.aggregate(total=Sum('amount'))['total'] or 0
         successful_payments = payments.filter(is_successful=True)
         
+        payment_count = payments.count()
+        successful_count = successful_payments.count()
+        
     except CarOwner.DoesNotExist:
         payments = []
         total_paid = 0
         successful_payments = []
+        payment_count = 0
+        successful_count = 0
     
     context = {
         'payments': payments,
         'total_paid': total_paid,
-        'payment_count': payments.count(), # type: ignore
-        'successful_count': successful_payments.count(), # type: ignore
+        'payment_count': payment_count,
+        'successful_count': successful_count,
     }
     return render(request, 'users/payments.html', context)
 

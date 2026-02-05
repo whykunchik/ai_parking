@@ -13,35 +13,85 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Добро пожаловать, {{ full_name }}!</h2>
-    <p>Имя пользователя: {{ user.username }}</p>
-    <p>Email: {{ user.email|default:"Не указан" }}</p>
-    <p>Статус: {% if user.is_staff %}Администратор{% else %}Пользователь{% endif %}</p>
-    
-    <div>
-        <div>
-            <h3>Мои автомобили</h3>
-            <p>Управление транспортными средствами</p>
-            <a href="{% url 'my_vehicles' %}">Перейти</a>
-        </div>
-        
-        <div>
-            <h3>Парковочные сессии</h3>
-            <p>Информация о парковках</p>
-            <a href="{% url 'parking_sessions' %}">Просмотреть</a>
-        </div>
-        
-        <div>
-            <h3>Платежи</h3>
-            <p>История платежей</p>
-            <a href="{% url 'payments' %}">Оплатить</a>
+<div class="row">
+    <div class="col">
+        <div class="card text-center">
+            <h2>Добро пожаловать, {{ full_name }}!</h2>
+            <div class="row mt-3">
+                <div class="col">
+                    <div class="card">
+                        <h4>Профиль</h4>
+                        <p><strong>Имя пользователя:</strong> {{ user.username }}</p>
+                        <p><strong>Email:</strong> {{ user.email|default:"Не указан" }}</p>
+                        <p><strong>Статус:</strong> 
+                            <span class="parking-status {% if user.is_staff %}status-active{% else %}status-completed{% endif %}">
+                                {% if user.is_staff %}Администратор{% else %}Пользователь{% endif %}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    
-    {% if user.is_staff %}
-    <div>
-        <a href="{% url 'admin_dashboard' %}">Административная панель</a>
-        <a href="/admin/">Django Админка</a>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <div class="card">
+            <h3>Быстрый доступ</h3>
+            <div class="row mt-3">
+                <div class="col">
+                    <div class="card text-center">
+                        <h4>Мои автомобили</h4>
+                        <p>Управление транспортными средствами</p>
+                        <a href="{% url 'my_vehicles' %}" class="btn mt-2">Перейти →</a>
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="card text-center">
+                        <h4>Парковочные сессии</h4>
+                        <p>Информация о парковках</p>
+                        <a href="{% url 'parking_sessions' %}" class="btn mt-2">Просмотреть →</a>
+                    </div>
+                </div>
+                
+                <div class="col">
+                    <div class="card text-center">
+                        <h4>Платежи</h4>
+                        <p>История платежей</p>
+                        <a href="{% url 'payments' %}" class="btn mt-2">Оплатить →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    {% endif %}
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <div class="card">
+            <h3>Действия</h3>
+            <div class="row mt-3">
+                {% if user.is_staff %}
+                <div class="col">
+                    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary" style="width: 100%;">
+                        Административная панель
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="/admin/" class="btn btn-secondary" style="width: 100%;">
+                        Django Админка
+                    </a>
+                </div>
+                {% endif %}
+                <div class="col">
+                    <a href="{% url 'logout' %}?next={% url 'home' %}" class="btn btn-danger" style="width: 100%;">
+                        Выйти из системы
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
