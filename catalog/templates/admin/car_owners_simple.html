@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Владельцы автомобилей{% endblock %}
+
+{% block navigation %}
+    <span>Администратор: {{ user.username }}</span>
+    <a href="{% url 'admin_dashboard' %}">Админ-панель</a>
+    <a href="/admin/">Django Admin</a>
+    <a href="{% url 'home' %}">Главная</a>
+    <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Владельцы автомобилей</h2>
+    <p class="text-muted">Всего владельцев: {{ owners.count }}</p>
+</div>
+
+<div class="card mt-3">
+    <h3>Список владельцев</h3>
+    
+    {% if owners %}
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Пользователь</th>
+                    <th>Телефон</th>
+                    <th>Email</th>
+                    <th>Автомобилей</th>
+                    <th>Дата регистрации</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for owner in owners %}
+                <tr>
+                    <td>{{ owner.id }}</td>
+                    <td>
+                        <strong>{{ owner.user.get_full_name|default:owner.user.username }}</strong><br>
+                        <small>@{{ owner.user.username }}</small>
+                    </td>
+                    <td>{{ owner.phone }}</td>
+                    <td>{{ owner.user.email }}</td>
+                    <td>
+                        <span class="badge">
+                            {{ owner.vehicle_set.count }}
+                        </span>
+                    </td>
+                    <td>{{ owner.user.date_joined|date:"d.m.Y" }}</td>
+                    <td>
+                        <a href="/admin/catalog/carowner/{{ owner.id }}/change/" class="btn btn-small" target="_blank">Добавить автомобиль</a>
+                        <a href="/admin/auth/user/{{ owner.user.id }}/change/" class="btn btn-small" target="_blank">Изменить пользователя</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>Владельцев не найдено.</p>
+    {% endif %}
+</div>
+
+<div class="card mt-3">
+        <div class="col">
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary" style="width: 100%;">← Назад</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

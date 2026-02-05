@@ -27,6 +27,7 @@ from datetime import datetime, timedelta
 from .forms import UserRegistrationForm
 # Импортируем форму
 from django.contrib.auth import logout as auth_logout
+from .models import CarOwner, Vehicle, ParkingSession, Payment, Tariff, LicensePlateDetection
 
 # Функция входа
 def login_view(request):
@@ -210,3 +211,64 @@ def logout_view(request):
     """Представление для выхода из системы"""
     auth_logout(request)
     return redirect('home')
+
+@login_required
+def admin_car_owners_short_view(request):
+    """Простая страница владельцев автомобилей"""
+    if not request.user.is_staff:
+        messages.error(request, "Доступ запрещен")
+        return redirect('dashboard')
+    
+    owners = CarOwner.objects.all().order_by('-id')[:50]
+    
+    context = {
+        'owners': owners,
+    }
+    return render(request, 'admin/car_owners_simple.html', context)
+
+@login_required
+def admin_license_plates_short_view(request):
+    """Простая страница распознанных номеров"""
+    if not request.user.is_staff:
+        messages.error(request, "Доступ запрещен")
+        return redirect('dashboard')
+    
+    plates = LicensePlateDetection.objects.all().order_by('-detection_time')[:50]
+    
+    # Простая статистика
+    today = datetime.now().date()
+    today_plates = LicensePlateDetection.objects.filter(detection_time__date=today)
+    
+    context = {
+        'plates': plates,
+        'today_count': today_plates.count(),
+        'unique_today': today_plates.values('license_plate').distinct().count(),
+    }
+    return render(request, 'admin/license_plates_simple.html', context)
+
+@login_required
+def admin_failed_payments_short_view(request):
+    """Простая страница неуспешных платежей"""
+    if not request.user.is_staff:
+        messages.error(request, "Доступ запрещен")
+        return redirect('dashboard')
+    
+    failed_payments = Payment.objects.filter(is_successful=False).order_by('-payment_date')[:50]
+    
+    # Простая статистика
+    successful_count = Payment.objects.filter(is_successful=True).count()
+    failed_count = Payment.objects.filter(is_successful=False).count()
+    total_payments = successful_count + failed_count
+    
+    success_rate = 0
+    if total_payments > 0:
+        success_rate = round((successful_count / total_payments) * 100, 1)
+    
+    context = {
+        'failed_payments': failed_payments,
+        'failed_count': failed_count,
+        'successful_count': successful_count,
+        'success_rate': success_rate,
+        'total_payments': total_payments,
+    }
+    return render(request, 'admin/failed_payments_simple.html', context)

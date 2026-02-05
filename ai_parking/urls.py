@@ -15,25 +15,35 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-
-from django.urls import include
+from django.urls import path, include
 from django.views.generic import TemplateView, RedirectView
 from catalog.views import (
     login_view, user_dashboard_view, admin_dashboard_view, 
     register_view, my_vehicles_view, parking_sessions_view, 
-    payments_view, logout_view  
+    payments_view, logout_view, admin_car_owners_short_view,
+    admin_license_plates_short_view, admin_failed_payments_short_view,
 )
-urlpatterns = [
+
+urlpatterns = [  
+    # Административные страницы  
+    path('admin/car-owners-simple/', admin_car_owners_short_view, name='admin_car_owners_simple'),    
+    path('admin/license-plates-simple/', admin_license_plates_short_view, name='admin_license_plates_simple'),
+    path('admin/failed-payments-simple/', admin_failed_payments_short_view, name='admin_failed_payments_simple'),
+    
     path('catalog/', RedirectView.as_view(url='/', permanent=True)),
     path('admin/', admin.site.urls),
     path('login/', login_view, name='login'),
     path('register/', register_view, name='register'),
     path('logout/', logout_view, name='logout'),
+    
+    # Пользовательские страницы    
     path('dashboard/', user_dashboard_view, name='dashboard'),
-    path('admin-dashboard/', admin_dashboard_view, name='admin_dashboard'),
     path('my-vehicles/', my_vehicles_view, name='my_vehicles'),
     path('parking-sessions/', parking_sessions_view, name='parking_sessions'),
     path('payments/', payments_view, name='payments'),
+    
+    # Административные страницы    
+    path('admin-dashboard/', admin_dashboard_view, name='admin_dashboard'),
+    
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]
