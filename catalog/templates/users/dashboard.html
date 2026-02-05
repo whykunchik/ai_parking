@@ -75,18 +75,18 @@
             <div class="row mt-3">
                 {% if user.is_staff %}
                 <div class="col">
-                    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary" style="width: 100%;">
+                    <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">
                         Административная панель
                     </a>
                 </div>
                 <div class="col">
-                    <a href="/admin/" class="btn btn-secondary" style="width: 100%;">
+                    <a href="/admin/" class="btn btn-secondary">
                         Django Админка
                     </a>
                 </div>
                 {% endif %}
                 <div class="col">
-                    <a href="{% url 'logout' %}?next={% url 'home' %}" class="btn btn-danger" style="width: 100%;">
+                    <a href="{% url 'logout' %}?next={% url 'home' %}" class="btn btn-danger">
                         Выйти из системы
                     </a>
                 </div>
