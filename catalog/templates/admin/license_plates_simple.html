@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Распознанные номера{% endblock %}
+
+{% block navigation %}
+    <span>Администратор: {{ user.username }}</span>
+    <a href="{% url 'admin_dashboard' %}">Админ-панель</a>
+    <a href="/admin/">Django Admin</a>
+    <a href="{% url 'home' %}">Главная</a>
+    <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Распознанные номера</h2>
+    <p class="text-muted">Всего записей: {{ plates.count }}</p>
+</div>
+
+<div class="card mt-3">
+    <h3>Последние распознанные номера</h3>
+    
+    {% if plates %}
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Номер</th>
+                    <th>Время распознавания</th>
+                    <th>Изображение</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for plate in plates %}
+                <tr>
+                    <td>
+                        <strong>{{ plate.license_plate }}</strong><br>
+                        <small class="text-muted">ID: {{ plate.id }}</small>
+                    </td>
+                    <td>{{ plate.detection_time|date:"d.m.Y H:i:s" }}</td>
+                    <td>
+                        {% if plate.image_path %}
+                            <a href="{{ plate.image_path }}" target="_blank">Просмотр</a>
+                        {% else %}
+                            <span class="text-muted">Нет</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if plate.license_plate|length >= 8 %}
+                            <span class="badge badge-success">Корректный</span>
+                        {% else %}
+                            <span class="badge badge-warning">Короткий</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="/admin/catalog/licenseplatedetection/{{ plate.id }}/delete/" class="btn btn-small" style="background: #d32f2f;" target="_blank">🗑️</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>Распознанных номеров не найдено.</p>
+    {% endif %}
+</div>
+
+<div class="card mt-3">
+    <h3>Статистика за сегодня</h3>
+    <div class="row">
+        <div class="col">
+            <div class="card text-center">
+                <h4>Всего сегодня</h4>
+                <p class="stat-number">{{ today_count }}</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center">
+                <h4>Уникальных номеров</h4>
+                <p class="stat-number">{{ unique_today }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <h3>Быстрые действия</h3>
+    <div class="row mt-2">
+        <div class="col">
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">← Назад</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

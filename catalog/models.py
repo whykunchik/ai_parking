@@ -19,15 +19,22 @@ class CarOwner(models.Model):
     
 # Модель транспортного средства
 class Vehicle(models.Model):
+    VEHICLE_TYPES = [
+        ('car', 'Легковой автомобиль'),
+        ('truck', 'Грузовик'),
+        ('motorcycle', 'Мотоцикл'),
+        ('bus', 'Автобус'),
+    ]
+    
     owner = models.ForeignKey(CarOwner, on_delete=models.CASCADE)
-    # ForeignKey - многие к одному (у одного владельца может быть несколько авто) 
-   
-
-    state_number = models.CharField(    # state_number - госномер
-        max_length=9, 
-        unique=True,  # Уникальное значение (не может быть двух авто с одним номером)
-        validators=[MinLengthValidator(8)]  # Минимум 5 символов
-    )
+    state_number = models.CharField(max_length=9, unique=True)
+    brand = models.CharField(max_length=100, verbose_name='Марка')
+    model = models.CharField(max_length=100, verbose_name='Модель')
+    color = models.CharField(max_length=50, verbose_name='Цвет')
+    year = models.PositiveIntegerField(verbose_name='Год выпуска')
+    vehicle_type = models.CharField(max_length=20, choices=VEHICLE_TYPES, default='car', verbose_name='Тип ТС')
+    is_active = models.BooleanField(default=True, verbose_name='Активен')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = 'Транспортное средство'

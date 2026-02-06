@@ -1,375 +1,190 @@
-.sidebar-nav {
-  margin-top: 20px;
-  padding: 0;
-  list-style: none;
-}
-/* static/css/dark-theme.css */
+/* 
+  Файл темной темы для веб-приложения
+  static/css/dark-theme.css 
+*/
+
+/* 
+  Сброс стандартных отступов и использование border-box 
+  для всех элементов на странице
+*/
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    margin: 0;          /* Убираем внешние отступы */
+    padding: 0;         /* Убираем внутренние отступы */
+    box-sizing: border-box; /* padding и border включаются в ширину/высоту */
 }
+
+/* 
+  Основные стили для body - тела документа
+*/
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #121212;
-    color: #e0e0e0;
-    line-height: 1.6;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Шрифт для всего текста */
+    background-color: #121212; /* Темный фон всей страницы */
+    color: #e0e0e0;            /* Светлый цвет текста для контраста */
+    line-height: 1.6;          /* Высота строки для удобочитаемости */
+    min-height: 100vh;         /* Минимальная высота - весь экран */
 }
 
+/* 
+  Основной контейнер для центрирования контента
+*/
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
+    max-width: 1200px;  /* Максимальная ширина контейнера */
+    margin: 0 auto;     /* Центрирование по горизонтали */
+    padding: 0 20px;    /* Отступы по бокам на маленьких экранах */
 }
 
-/* Шапка */
+/* ========== ШАПКА ========== */
 header {
-    background-color: #1e1e1e;
-    border-bottom: 2px solid #333;
-    padding: 1rem 0;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    background-color: #1e1e1e;  /* Цвет фона шапки */
+    border-bottom: 1px solid #333; /* Нижняя граница */
+    padding: 1rem 0;           /* Внутренние отступы сверху/снизу */
 }
 
 header h1 {
-    color: #4a9eff;
-    text-align: center;
-    margin-bottom: 1rem;
-    font-size: 2.2rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    color: #4a9eff;            /* Синий цвет для заголовка */
+    text-align: center;        /* Выравнивание по центру */
+    margin-bottom: 1rem;       /* Отступ снизу */
+    font-size: 2rem;           /* Размер шрифта */
 }
 
-/* Навигация */
+/* ========== НАВИГАЦИЯ ========== */
 nav {
-    background-color: #252525;
-    padding: 0.8rem 0;
-    border-radius: 8px;
-    margin: 0 20px;
+    background-color: #252525;  /* Темный фон навигации */
+    padding: 0.5rem 0;          /* Внутренние отступы */
 }
 
+/* Стили для ссылок в навигации */
 nav a {
-    color: #8ab4f8;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    margin: 0 0.3rem;
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    display: inline-block;
-    border: 1px solid transparent;
+    color: #8ab4f8;            /* Светло-синий цвет ссылок */
+    text-decoration: none;     /* Убираем подчеркивание */
+    padding: 0.5rem 1rem;      /* Внутренние отступы */
+    margin: 0 0.2rem;          /* Внешние отступы по бокам */
 }
 
-nav a:hover {
-    background-color: #333;
-    color: #bb86fc;
-    border-color: #4a9eff;
-    transform: translateY(-2px);
-}
-
+/* Стили для неактивных элементов навигации */
 nav span {
-    color: #a0a0a0;
-    padding: 0.5rem 1rem;
-    font-style: italic;
+    color: #a0a0a0;            /* Серый цвет текста */
+    padding: 0.5rem 1rem;      /* Отступы как у ссылок */
 }
 
-/* Основной контент */
+/* ========== ОСНОВНОЙ КОНТЕНТ ========== */
 main {
-    flex: 1;
-    padding: 2rem 0;
-    background-color: #181818;
+    padding: 1.5rem 0;         /* Отступы сверху/снизу */
+    background-color: #181818; /* Фон основного контента */
 }
 
-/* Карточки */
+/* ========== КАРТОЧКИ ========== */
 .card {
-    background-color: #252525;
-    border-radius: 10px;
-    padding: 1.5rem;
-    margin: 1rem 0;
-    border: 1px solid #333;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #252525;  /* Фон карточки */
+    border-radius: 8px;         /* Скругленные углы */
+    padding: 1.5rem;           /* Внутренние отступы */
+    margin: 1rem 0;            /* Внешние отступы сверху/снизу */
+    border: 1px solid #333;    /* Граница карточки */
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    border-color: #4a9eff;
-}
-
+/* Заголовки внутри карточек */
 .card h2, .card h3 {
-    color: #4a9eff;
-    margin-bottom: 1rem;
-    border-bottom: 2px solid #333;
-    padding-bottom: 0.5rem;
+    color: #4a9eff;            /* Синий цвет заголовков */
+    margin-bottom: 1rem;       /* Отступ снизу */
+    border-bottom: 1px solid #333; /* Подчеркивание заголовка */
+    padding-bottom: 0.5rem;    /* Отступ от текста до линии */
 }
 
-/* Кнопки */
+/* ========== КНОПКИ ========== */
 button, .btn {
-    background: linear-gradient(135deg, #4a9eff, #2979ff);
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    width: 100%;
+    background-color: #4a9eff;  /* Синий фон кнопки */
+    color: white;               /* Белый текст */
+    border: none;               /* Без границы */
+    padding: 0.7rem 1.2rem;     /* Внутренние отступы */
+    border-radius: 4px;         /* Скругленные углы */
+    cursor: pointer;            /* Курсор-указатель */
+    font-size: 1rem;            /* Размер шрифта */
+    text-decoration: none;      /* Убираем подчеркивание у ссылок-кнопок */
+    display: inline-block;      /* Для применения отступов к ссылкам */
+    width: 100%;                /* Ширина на всю доступную область */
 }
 
+/* Вторичная кнопка */
 .btn-secondary {
-    background: linear-gradient(135deg, #666, #444);
+    background-color: #666;     /* Серый фон */
 }
 
-.btn-secondary:hover {
-    background: linear-gradient(135deg, #555, #333);
-}
-
+/* Опасная кнопка (удаление и т.п.) */
 .btn-danger {
-    background: linear-gradient(135deg, #ff5252, #d32f2f);
+    background-color: #d32f2f;  /* Красный фон */
 }
 
-.btn-danger:hover {
-    background: linear-gradient(135deg, #d32f2f, #b71c1c);
-}
-
-/* Формы */
+/* ========== ФОРМЫ ========== */
 form {
-    background-color: #252525;
-    padding: 2rem;
-    border-radius: 10px;
-    border: 1px solid #333;
-    max-width: 500px;
-    margin: 2rem auto;
+    background-color: #252525;  /* Фон формы */
+    padding: 1.5rem;           /* Внутренние отступы */
+    border-radius: 8px;         /* Скругленные углы */
+    border: 1px solid #333;    /* Граница формы */
+    max-width: 500px;          /* Максимальная ширина формы */
+    margin: 1.5rem auto;       /* Центрирование формы */
 }
 
+/* Группа полей формы */
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;       /* Отступ между группами полей */
 }
 
+/* Подписи к полям формы */
 label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #a0a0a0;
-    font-weight: 500;
+    display: block;             /* Блочное отображение (на всю ширину) */
+    margin-bottom: 0.3rem;     /* Отступ снизу */
+    color: #a0a0a0;            /* Серый цвет текста */
 }
 
+/* Общие стили для полей ввода */
 input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="number"],
 select,
 textarea {
-    width: 100%;
-    padding: 0.8rem;
-    background-color: #333;
-    border: 1px solid #444;
-    border-radius: 6px;
-    color: #e0e0e0;
-    font-size: 1rem;
-    transition: border-color 0.3s ease;
+    width: 100%;               /* Ширина на всю доступную область */
+    padding: 0.7rem;          /* Внутренние отступы */
+    background-color: #333;   /* Темный фон поля */
+    border: 1px solid #444;   /* Граница поля */
+    border-radius: 4px;       /* Скругленные углы */
+    color: #e0e0e0;           /* Светлый цвет текста */
+    font-size: 1rem;          /* Размер шрифта */
 }
 
-input:focus,
-select:focus,
-textarea:focus {
-    outline: none;
-    border-color: #4a9eff;
-    box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.2);
-}
-
-/* Таблицы */
+/* ========== ТАБЛИЦЫ ========== */
 table {
-    width: 100%;
-    background-color: #252525;
-    border-collapse: collapse;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin: 1.5rem 0;
+    width: 100%;               /* Ширина таблицы на весь контейнер */
+    background-color: #252525; /* Фон таблицы */
+    border-collapse: collapse; /* Убираем двойные границы */
+    margin: 1rem 0;           /* Отступы сверху/снизу */
 }
 
+/* Заголовки столбцов таблицы */
 th {
-    background-color: #333;
-    color: #4a9eff;
-    padding: 1rem;
-    text-align: left;
-    font-weight: 600;
-    border-bottom: 2px solid #444;
+    background-color: #333;   /* Темный фон заголовков */
+    color: #4a9eff;           /* Синий цвет текста заголовков */
+    padding: 0.8rem;          /* Внутренние отступы ячеек */
+    text-align: left;         /* Выравнивание текста по левому краю */
+    border-bottom: 2px solid #444; /* Толстая нижняя граница */
 }
 
+/* Ячейки таблицы */
 td {
-    padding: 1rem;
-    border-bottom: 1px solid #333;
-    color: #ccc;
+    padding: 0.8rem;          /* Внутренние отступы ячеек */
+    border-bottom: 1px solid #333; /* Граница между строками */
 }
 
-tr:hover {
-    background-color: #2d2d2d;
-}
-
-tr:last-child td {
-    border-bottom: none;
-}
-
-/* Сообщения */
-.alert {
-    padding: 1rem;
-    border-radius: 6px;
-    margin: 1rem 0;
-    border: 1px solid transparent;
-}
-
-.alert-success {
-    background-color: #1b5e20;
-    color: #a5d6a7;
-    border-color: #2e7d32;
-}
-
-.alert-error {
-    background-color: #b71c1c;
-    color: #ffcdd2;
-    border-color: #d32f2f;
-}
-
-.alert-info {
-    background-color: #01579b;
-    color: #bbdefb;
-    border-color: #0288d1;
-}
-
-/* Списки */
-ul, ol {
-    padding-left: 2rem;
-    margin: 1rem 0;
-}
-
-li {
-    margin: 0.5rem 0;
-    color: #ccc;
-}
-
-/* Подвал */
-footer {
-    background-color: #1e1e1e;
-    border-top: 2px solid #333;
-    padding: 1.5rem 0;
-    margin-top: 2rem;
-    text-align: center;
-    color: #888;
-}
-
-footer p {
-    margin: 0.5rem 0;
-}
-
-/* Утилиты */
-.text-center {
-    text-align: center;
-}
-
-.text-muted {
-    color: #888;
-}
-
-.mt-1 { margin-top: 0.5rem; }
-.mt-2 { margin-top: 1rem; }
-.mt-3 { margin-top: 1.5rem; }
-.mt-4 { margin-top: 2rem; }
-
-.mb-1 { margin-bottom: 0.5rem; }
-.mb-2 { margin-bottom: 1rem; }
-.mb-3 { margin-bottom: 1.5rem; }
-.mb-4 { margin-bottom: 2rem; }
-
-.p-1 { padding: 0.5rem; }
-.p-2 { padding: 1rem; }
-.p-3 { padding: 1.5rem; }
-.p-4 { padding: 2rem; }
-
-/* Сетка */
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    margin: -0.5rem;
-}
-
-.col {
-    flex: 1;
-    padding: 0.5rem;
-    min-width: 400px;
-}
-
-/* Адаптивность */
+/* ========== АДАПТИВНОСТЬ ========== */
 @media (max-width: 768px) {
+    /* На мобильных устройствах */
     .container {
-        padding: 0 10px;
+        padding: 0 10px;      /* Уменьшаем боковые отступы */
     }
     
-    nav {
-        margin: 0 10px;
-        text-align: center;
-    }
-    
-    nav a {
-        display: block;
-        margin: 0.3rem 0;
-        width: 100%;
-    }
-    
+    /* Скрываем таблицу с горизонтальным скроллом */
     table {
-        display: block;
-        overflow-x: auto;
+        display: block;       /* Блочное отображение для скролла */
+        overflow-x: auto;     /* Горизонтальный скролл при необходимости */
     }
-    
-    .row {
-        flex-direction: column;
-    }
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 1.5rem;
-        margin: 2rem 0;
-    }
-    
-    .feature-card {
-        background: linear-gradient(145deg, #252525, #1e1e1e);
-        border: 1px solid #333;
-        border-radius: 12px;
-        padding: 1.5rem;
-        transition: all 0.3s ease;
-    }
-    
-    .feature-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        border-color: #4a9eff;
-    }
-    
-    .stat-card {
-        text-align: center;
-        background: linear-gradient(135deg, #2d2d2d, #252525);
-        border-radius: 12px;
-        padding: 1.5rem;
-        border: 1px solid #333;
-    }
-    
-    .stat-value {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #4a9eff;
-        margin: 0.5rem 0;
-    }
-    
-    .stat-label {
-        color: #888;
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
 }

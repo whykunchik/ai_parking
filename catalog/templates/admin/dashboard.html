@@ -72,7 +72,7 @@
                     </a>
                 </div>
                 <div class="col">
-                    <a href="/admin/catalog/licenseplatedetection/" class="btn">
+                    <a href="{% url 'admin_license_plates_simple' %}" class="btn">
                         Распознанные номера →
                     </a>
                 </div>
@@ -80,7 +80,7 @@
             
             <div class="row mt-2">
                 <div class="col">
-                    <a href="/admin/catalog/payment/?is_successful=False" class="btn">
+                    <a href="{% url 'admin_failed_payments_simple' %}" class="btn">
                         Неуспешные платежи →
                     </a>
                 </div>
@@ -99,11 +99,6 @@
         <div class="card">
             <h3>Быстрые действия</h3>
             <div class="row mt-3">
-                <div class="col">
-                    <a href="/admin/catalog/payment/" class="btn btn-secondary">
-                        Платежи
-                    </a>
-                </div>
                 <div class="col">
                     <a href="/admin/auth/user/" class="btn btn-secondary">
                         Управление пользователями

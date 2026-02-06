@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %}Неуспешные платежи{% endblock %}
+
+{% block navigation %}
+    <span>Администратор: {{ user.username }}</span>
+    <a href="{% url 'admin_dashboard' %}">Админ-панель</a>
+    <a href="/admin/">Django Admin</a>
+    <a href="{% url 'home' %}">Главная</a>
+    <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Неуспешные платежи</h2>
+    <p class="text-muted">Всего неуспешных: {{ failed_payments.count }}</p>
+</div>
+
+<div class="card mt-3">
+    <h3>Список неуспешных платежей</h3>
+    
+    {% if failed_payments %}
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Дата</th>
+                    <th>Сумма</th>
+                    <th>Парковочная сессия</th>
+                    <th>Способ оплаты</th>
+                    <th>ID транзакции</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment in failed_payments %}
+                <tr style="background: rgba(244, 67, 54, 0.1);">
+                    <td>{{ payment.id }}</td>
+                    <td>{{ payment.payment_date|date:"d.m.Y H:i" }}</td>
+                    <td><strong>{{ payment.amount }} ₽</strong></td>
+                    <td>
+                        <a href="/admin/catalog/parkingsession/{{ payment.parking_session.id }}/change/" target="_blank">
+                            #{{ payment.parking_session.id }}
+                        </a>
+                    </td>
+                    <td>{{ payment.get_payment_method_display }}</td>
+                    <td>
+                        {% if payment.transaction_id %}
+                            <code>{{ payment.transaction_id|truncatechars:15 }}</code>
+                        {% else %}
+                            <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="/admin/catalog/payment/{{ payment.id }}/delete/" class="btn btn-small" style="background: #d32f2f;" target="_blank">🗑️</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-success">
+        <p>Ура! Неуспешных платежей не обнаружено.</p>
+    </div>
+    {% endif %}
+</div>
+
+<div class="card mt-3">
+    <h3>Статистика</h3>
+    <div class="row">
+        <div class="col">
+            <div class="card text-center">
+                <h4>Неуспешных</h4>
+                <p class="stat-number" style="color: #f44336;">{{ failed_count }}</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center">
+                <h4>Успешных</h4>
+                <p class="stat-number" style="color: #4caf50;">{{ successful_count }}</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center">
+                <h4>Процент успеха</h4>
+                <p class="stat-number">
+                    {% if total_payments > 0 %}
+                        {{ success_rate }}%
+                    {% else %}
+                        0%
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <h3>Быстрые действия</h3>
+    <div class="row mt-2">
+        <div class="col">
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">← Назад</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
