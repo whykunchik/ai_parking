@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import CarOwner, VehicleRequest
+from .models import CarOwner
 
 class UserRegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -26,39 +26,3 @@ class UserRegistrationForm(UserCreationForm):
                 phone=self.cleaned_data['phone']
             )
         return user
-
-class VehicleRequestForm(forms.ModelForm):
-    class Meta:
-        model = VehicleRequest
-        fields = ['state_number', 'brand', 'model', 'color', 'year', 'vehicle_type']
-        widgets = {
-            'state_number': forms.TextInput(attrs={
-                'placeholder': 'А123БВ77',
-                'class': 'form-control'
-            }),
-            'brand': forms.TextInput(attrs={
-                'placeholder': 'Toyota',
-                'class': 'form-control'
-            }),
-            'model': forms.TextInput(attrs={
-                'placeholder': 'Camry',
-                'class': 'form-control'
-            }),
-            'color': forms.TextInput(attrs={
-                'placeholder': 'Черный',
-                'class': 'form-control'
-            }),
-            'year': forms.NumberInput(attrs={
-                'placeholder': '2020',
-                'class': 'form-control',
-                'min': '1900',
-                'max': '2100'
-            }),
-            'vehicle_type': forms.Select(attrs={'class': 'form-control'})
-        }
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Добавляем CSS классы ко всем полям
-        for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'

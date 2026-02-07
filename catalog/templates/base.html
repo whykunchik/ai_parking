@@ -16,7 +16,6 @@
                 <span>Пользователь: {{ user.username }}</span>
                 <a href="{% url 'home' %}">Главная</a>
                 <a href="{% url 'dashboard' %}">Панель управления</a> 
-                <a href="{% url 'my_vehicle_requests' %}">Мои запросы</a>
                 <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
             {% else %}
                 <a href="{% url 'home' %}">Главная</a>
