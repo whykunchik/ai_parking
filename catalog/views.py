@@ -24,10 +24,11 @@ from django.db.models import Sum, Count
 from datetime import datetime, timedelta
 # datetime - работа с датой/временем
 # timedelta - разница во времени
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, VehicleRequestForm  
 # Импортируем форму
 from django.contrib.auth import logout as auth_logout
-from .models import CarOwner, Vehicle, ParkingSession, Payment, Tariff, LicensePlateDetection
+
+from catalog.models import CarOwner, Vehicle, ParkingSession, Payment, Tariff, LicensePlateDetection, VehicleRequest
 
 # Функция входа
 def login_view(request):
@@ -272,3 +273,130 @@ def admin_failed_payments_short_view(request):
         'total_payments': total_payments,
     }
     return render(request, 'admin/failed_payments_simple.html', context)
+
+@login_required
+def request_vehicle_view(request):
+    """Пользователь создает запрос на добавление автомобиля"""
+    try:
+        car_owner = CarOwner.objects.get(user=request.user)
+    except CarOwner.DoesNotExist:
+        messages.error(request, "У вас нет профиля владельца автомобиля.")
+        return redirect('dashboard')
+    
+    if request.method == 'POST':
+        form = VehicleRequestForm(request.POST)
+        if form.is_valid():
+            # Сохраняем запрос с привязкой к владельцу
+            vehicle_request = form.save(commit=False)
+            vehicle_request.owner = car_owner
+            vehicle_request.save()
+            
+            messages.success(request, f"Запрос на добавление автомобиля {vehicle_request.state_number} отправлен на рассмотрение.")
+            return redirect('my_vehicle_requests')
+    else:
+        form = VehicleRequestForm()
+    
+    context = {
+        'form': form,
+        'car_owner': car_owner,
+    }
+    return render(request, 'users/request_vehicle.html', context)
+
+@login_required
+def my_vehicle_requests_view(request):
+    """Страница с запросами пользователя"""
+    try:
+        car_owner = CarOwner.objects.get(user=request.user)
+        requests = VehicleRequest.objects.filter(owner=car_owner).order_by('-request_date')
+    except CarOwner.DoesNotExist:
+        requests = []
+        car_owner = None
+    
+    context = {
+        'requests': requests,
+        'car_owner': car_owner,
+    }
+    return render(request, 'users/my_vehicle_requests.html', context)
+
+# АДМИНСКИЕ ПРЕДСТАВЛЕНИЯ
+
+@login_required
+def admin_vehicle_requests_view(request):
+    """Админская страница с запросами на добавление автомобилей"""
+    if not request.user.is_staff:
+        messages.error(request, "Доступ запрещен")
+        return redirect('dashboard')
+    
+    # Получаем запросы с фильтрацией по статусу
+    status_filter = request.GET.get('status', 'all')
+    
+    if status_filter == 'pending':
+        vehicle_requests = VehicleRequest.objects.filter(status='pending').order_by('request_date')
+    elif status_filter == 'approved':
+        vehicle_requests = VehicleRequest.objects.filter(status='approved').order_by('-processed_date')
+    elif status_filter == 'rejected':
+        vehicle_requests = VehicleRequest.objects.filter(status='rejected').order_by('-processed_date')
+    else:
+        vehicle_requests = VehicleRequest.objects.all().order_by('-request_date')
+    
+    # Статистика
+    pending_count = VehicleRequest.objects.filter(status='pending').count()
+    approved_count = VehicleRequest.objects.filter(status='approved').count()
+    rejected_count = VehicleRequest.objects.filter(status='rejected').count()
+    total_count = pending_count + approved_count + rejected_count
+    
+    context = {
+        'vehicle_requests': vehicle_requests,
+        'status_filter': status_filter,
+        'pending_count': pending_count,
+        'approved_count': approved_count,
+        'rejected_count': rejected_count,
+        'total_count': total_count,
+    }
+    return render(request, 'admin/vehicle_requests.html', context)
+
+@login_required
+def admin_approve_vehicle_request_view(request, request_id):
+    """Одобрить запрос на добавление автомобиля"""
+    if not request.user.is_staff:
+        messages.error(request, "Доступ запрещен")
+        return redirect('dashboard')
+    
+    vehicle_request = get_object_or_404(VehicleRequest, id=request_id)
+    
+    # Проверяем, не существует ли уже автомобиль с таким номером
+    if Vehicle.objects.filter(state_number=vehicle_request.state_number).exists():
+        messages.error(request, f"Автомобиль с номером {vehicle_request.state_number} уже существует!")
+        return redirect('admin_vehicle_requests')
+    
+    # Одобряем запрос
+    try:
+        vehicle = vehicle_request.approve(request.user)
+        messages.success(request, f"Запрос одобрен! Автомобиль {vehicle.state_number} добавлен.")
+    except Exception as e:
+        messages.error(request, f"Ошибка при одобрении запроса: {str(e)}")
+    
+    return redirect('admin_vehicle_requests')
+
+@login_required
+def admin_reject_vehicle_request_view(request, request_id):
+    """Отклонить запрос на добавление автомобиля"""
+    if not request.user.is_staff:
+        messages.error(request, "Доступ запрещен")
+        return redirect('dashboard')
+    
+    vehicle_request = get_object_or_404(VehicleRequest, id=request_id)
+    
+    if request.method == 'POST':
+        reason = request.POST.get('reason', '').strip()
+        if not reason:
+            messages.error(request, "Укажите причину отказа")
+        else:
+            vehicle_request.reject(request.user, reason)
+            messages.success(request, f"Запрос отклонен. Причина: {reason}")
+            return redirect('admin_vehicle_requests')
+    
+    context = {
+        'vehicle_request': vehicle_request,
+    }
+    return render(request, 'admin/reject_vehicle_request.html', context)

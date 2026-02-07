@@ -22,6 +22,8 @@ from catalog.views import (
     register_view, my_vehicles_view, parking_sessions_view, 
     payments_view, logout_view, admin_car_owners_short_view,
     admin_license_plates_short_view, admin_failed_payments_short_view,
+    my_vehicle_requests_view, request_vehicle_view, admin_vehicle_requests_view,
+    admin_approve_vehicle_request_view, admin_reject_vehicle_request_view
 )
 
 urlpatterns = [  
@@ -46,4 +48,12 @@ urlpatterns = [
     path('admin-dashboard/', admin_dashboard_view, name='admin_dashboard'),
     
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
+        # Запросы на автомобили (пользовательские)
+    path('my-vehicle-requests/', my_vehicle_requests_view, name='my_vehicle_requests'),
+    path('request-vehicle/', request_vehicle_view, name='request_vehicle'),
+    
+    # Запросы на автомобили (админские)
+    path('admin/vehicle-requests/', admin_vehicle_requests_view, name='admin_vehicle_requests'),
+    path('admin/vehicle-requests/<int:request_id>/approve/', admin_approve_vehicle_request_view, name='admin_approve_vehicle_request'),
+    path('admin/vehicle-requests/<int:request_id>/reject/', admin_reject_vehicle_request_view, name='admin_reject_vehicle_request'),
 ]

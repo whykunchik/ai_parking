@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Отклонить запрос{% endblock %}
+
+{% block navigation %}
+    <span>Администратор: {{ user.username }}</span>
+    <a href="{% url 'admin_vehicle_requests' %}">Запросы на автомобили</a>
+    <a href="/admin/">Django Admin</a>
+    <a href="{% url 'home' %}">Главная</a>
+    <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-center">
+    <div class="col">
+        <div class="card">
+            <h2 class="text-center">Отклонить запрос на автомобиль</h2>
+            
+            <div class="alert alert-warning mt-3">
+                <p><strong>Внимание!</strong> Вы собираетесь отклонить запрос на добавление автомобиля.</p>
+            </div>
+            
+            <div class="card mt-3">
+                <h4>Информация о запросе</h4>
+                <p><strong>Пользователь:</strong> {{ vehicle_request.owner.user.get_full_name|default:vehicle_request.owner.user.username }}</p>
+                <p><strong>Номер:</strong> {{ vehicle_request.state_number }}</p>
+                <p><strong>Автомобиль:</strong> {{ vehicle_request.brand }} {{ vehicle_request.model }}, {{ vehicle_request.color }}, {{ vehicle_request.year }} год</p>
+                <p><strong>Дата запроса:</strong> {{ vehicle_request.request_date|date:"d.m.Y H:i" }}</p>
+            </div>
+            
+            <form method="post" class="mt-3">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="reason">Причина отказа:</label>
+                    <textarea name="reason" id="reason" rows="4" class="form-control" required placeholder="Укажите причину отклонения запроса..."></textarea>
+                    <small class="text-muted">Эта информация будет видна пользователю.</small>
+                </div>
+                
+                <div class="row mt-3">
+                    <div class="col">
+                        <button type="submit" class="btn" style="background: #f44336;">Отклонить запрос</button>
+                    </div>
+                    <div class="col">
+                        <a href="{% url 'admin_vehicle_requests' %}" class="btn btn-secondary">Отмена</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

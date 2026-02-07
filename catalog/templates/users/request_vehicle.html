@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Запрос на добавление автомобиля{% endblock %}
+
+{% block navigation %}
+    <span>Пользователь: {{ user.username }}</span>
+    <a href="{% url 'home' %}">Главная</a>
+    <a href="{% url 'dashboard' %}">Панель управления</a>
+    <a href="{% url 'my_vehicles' %}">Мои автомобили</a>
+    <a href="{% url 'my_vehicle_requests' %}">Мои запросы</a>
+    <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-center">
+    <div class="col">
+        <div class="card">
+            <h2 class="text-center">Запрос на добавление автомобиля</h2>
+            
+            <div class="mt-3">
+                <a href="{% url 'my_vehicle_requests' %}" class="btn btn-secondary">← Назад к запросам</a>
+            </div>
+            
+            <div class="alert alert-info mt-3">
+                <p>Заполните форму ниже для добавления нового автомобиля. Запрос будет рассмотрен администратором.</p>
+            </div>
+            
+            <form method="post" class="mt-3">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="id_state_number">Государственный номер:</label>
+                            {{ form.state_number }}
+                            {% if form.state_number.errors %}
+                            <div class="alert alert-error mt-1">{{ form.state_number.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="id_vehicle_type">Тип транспортного средства:</label>
+                            {{ form.vehicle_type }}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="id_brand">Марка:</label>
+                            {{ form.brand }}
+                            {% if form.brand.errors %}
+                            <div class="alert alert-error mt-1">{{ form.brand.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="id_model">Модель:</label>
+                            {{ form.model }}
+                            {% if form.model.errors %}
+                            <div class="alert alert-error mt-1">{{ form.model.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="id_color">Цвет:</label>
+                            {{ form.color }}
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="id_year">Год выпуска:</label>
+                            {{ form.year }}
+                            {% if form.year.errors %}
+                            <div class="alert alert-error mt-1">{{ form.year.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn mt-3">Отправить запрос</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
