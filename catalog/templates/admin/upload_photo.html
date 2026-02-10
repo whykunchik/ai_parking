@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Загрузка фото - Админ-панель{% endblock %}
+
+{% block navigation %}
+    <span>Администратор: {{ user.username }}</span>
+    <a href="{% url 'admin_dashboard' %}">Админ-панель</a>
+    <a href="/admin/">Django Admin</a>
+    <a href="{% url 'home' %}">Главная</a>
+    <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Загрузка фотографий</h2>
+    <p class="text-muted">Загрузка изображений в систему</p>
+</div>
+
+<div class="upload-form">
+    <h3>Загрузить новое фото</h3>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="upload-area">
+            <input type="file" name="photo" id="photoInput" accept="image/*" required>
+            <label for="photoInput">
+                <span>Нажмите для выбора файла или перетащите сюда</span>
+                <br>
+                <small class="text-muted">Поддерживаемые форматы: JPG, PNG, GIF</small>
+            </label>
+        </div>
+        
+        <div id="fileInfo" style="display: none;">
+            <p><strong>Выбран файл:</strong> <span id="fileName"></span></p>
+            <p><strong>Размер:</strong> <span id="fileSize"></span></p>
+        </div>
+        
+        <button type="submit" class="btn btn-upload">Загрузить фото</button>
+    </form>
+    
+    {% if upload_success %}
+    <div class="upload-status success">
+        <h4>Файл успешно загружен!</h4>
+        <p><strong>Имя файла:</strong> {{ uploaded_file_name }}</p>
+        <p><strong>Размер:</strong> {{ uploaded_file_size }}</p>
+        <p><strong>Ссылка:</strong> 
+            <a href="{{ uploaded_file_url }}" target="_blank">{{ uploaded_file_url }}</a>
+        </p>
+    </div>
+    
+    <div class="upload-preview">
+        <img src="{{ uploaded_file_url }}" alt="Загруженное фото">
+    </div>
+    {% endif %}
+</div>
+
+<div class="upload-info">
+    <h4>Информация о загрузке:</h4>
+    <ul>
+        <li>Максимальный размер файла: 10 MB</li>
+        <li>Поддерживаемые форматы: JPG, JPEG, PNG, GIF</li>
+        <li>Файлы сохраняются в папку: media/uploads/admin_photos/</li>
+        <li>Имя файла автоматически генерируется</li>
+    </ul>
+</div>
+
+<div class="card mt-3">
+    <h3>Быстрые действия</h3>
+    <div class="row mt-2">
+        <div class="col">
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">← Назад в админ-панель</a>
+        </div>
+        <div class="col">
+            <a href="/admin/" class="btn btn-secondary">Django Admin</a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('photoInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('fileSize').textContent = (file.size / 1024).toFixed(1) + ' КБ';
+        document.getElementById('fileInfo').style.display = 'block';
+    }
+});
+</script>
+{% endblock %}

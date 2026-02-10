@@ -17,11 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView, RedirectView
+
+from django.conf import settings
+from django.conf.urls.static import static
 from catalog.views import (
     login_view, user_dashboard_view, admin_dashboard_view, 
     register_view, my_vehicles_view, parking_sessions_view, 
     payments_view, logout_view, admin_car_owners_short_view,
     admin_license_plates_short_view, admin_failed_payments_short_view,
+    admin_upload_photo_view,
 )
 
 urlpatterns = [  
@@ -29,6 +33,7 @@ urlpatterns = [
     path('admin/car-owners-simple/', admin_car_owners_short_view, name='admin_car_owners_simple'),    
     path('admin/license-plates-simple/', admin_license_plates_short_view, name='admin_license_plates_simple'),
     path('admin/failed-payments-simple/', admin_failed_payments_short_view, name='admin_failed_payments_simple'),
+    path('admin/upload-photo/', admin_upload_photo_view, name='admin_upload_photo'),
 
     # Основные страницы
     path('catalog/', RedirectView.as_view(url='/', permanent=True)),
@@ -48,3 +53,6 @@ urlpatterns = [
     
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

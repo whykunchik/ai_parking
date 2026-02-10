@@ -30,6 +30,18 @@ from django.contrib.auth import logout as auth_logout
 
 from catalog.models import CarOwner, Vehicle, ParkingSession, Payment, LicensePlateDetection
 
+from django.core.files.storage import FileSystemStorage
+
+import os
+
+from django.conf import settings
+
+from django.core.files.storage import FileSystemStorage
+
+from .models import PhotoUpload, LicensePlateDetection
+
+from django.utils import timezone
+
 # Функция входа
 def login_view(request):
     # Если POST-запрос (пользователь отправил форму)
@@ -273,3 +285,94 @@ def admin_failed_payments_short_view(request):
         'total_payments': total_payments,
     }
     return render(request, 'admin/failed_payments_simple.html', context)
+
+@login_required
+def admin_photo_upload_view(request):
+    """Просмотр всех загруженных фотографий"""
+    if not request.user.is_staff:
+        messages.error(request, "Доступ запрещен")
+        return redirect('dashboard')
+    
+    status_filter = request.GET.get('status', 'all')
+    
+    if status_filter == 'pending':
+        photos = PhotoUpload.objects.filter(status='pending')
+    elif status_filter == 'completed':
+        photos = PhotoUpload.objects.filter(status='completed')
+    elif status_filter == 'failed':
+        photos = PhotoUpload.objects.filter(status='failed')
+    else:
+        photos = PhotoUpload.objects.all()
+    
+    # Статистика
+    stats = {
+        'total': PhotoUpload.objects.count(),
+        'pending': PhotoUpload.objects.filter(status='pending').count(),
+        'completed': PhotoUpload.objects.filter(status='completed').count(),
+        'failed': PhotoUpload.objects.filter(status='failed').count(),
+    }
+    
+    context = {
+        'user': request.user,
+        'photos': photos,
+        'stats': stats,
+        'current_filter': status_filter,
+    }
+    
+    return render(request, 'admin/photo_uploads.html', context)
+
+def process_photo(photo_id):
+    """Функция обработки фотографии и распознавания номера"""
+    try:
+        photo = PhotoUpload.objects.get(id=photo_id)
+        photo.status = 'processing'
+        photo.save()
+        
+        # Здесь будет ваша логика распознавания номера
+        # Для примера, извлечем "номер" из имени файла или сгенерируем тестовый
+        import re
+        
+        # Пример: ищем паттерны номера в имени файла
+        filename = photo.original_filename
+        plate_pattern = r'([A-ZА-Я]\d{3}[A-ZА-Я]{2}\d{2,3})|(\d{4}[A-ZА-Я]{2}\d{2})'
+        matches = re.findall(plate_pattern, filename.upper())
+        
+        detected_plate = None
+        if matches:
+            for match in matches:
+                for group in match:
+                    if group:
+                        detected_plate = group
+                        break
+        
+        # Если не нашли в имени файла, генерируем тестовый номер
+        if not detected_plate:
+            import random
+            letters = 'АВЕКМНОРСТУХ'
+            numbers = '0123456789'
+            detected_plate = f"{random.choice(letters)}{random.choice(numbers)}{random.choice(numbers)}{random.choice(numbers)}{random.choice(letters)}{random.choice(letters)}"
+        
+        # Сохраняем распознанный номер в LicensePlateDetection
+        license_plate = LicensePlateDetection.objects.create(
+            license_plate=detected_plate,
+            image_path=photo.file_path,
+            detection_time=timezone.now()
+        )
+        
+        # Обновляем статус фото и сохраняем распознанный номер
+        photo.status = 'completed'
+        photo.detected_license_plate = detected_plate
+        photo.save()
+        
+        # УДАЛЯЕМ оригинальный файл после успешной обработки
+        if os.path.exists(photo.file_path):
+            os.remove(photo.file_path)
+        
+        return True, detected_plate
+        
+    except Exception as e:
+        photo = PhotoUpload.objects.get(id=photo_id)
+        photo.status = 'failed'
+        photo.error_message = str(e)
+        photo.save()
+        return False, str(e)

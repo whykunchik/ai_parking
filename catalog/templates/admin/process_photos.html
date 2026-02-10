@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Обработка фото - Админ-панель{% endblock %}
+
+{% block navigation %}
+    <span>Администратор: {{ user.username }}</span>
+    <a href="{% url 'admin_dashboard' %}">Админ-панель</a>
+    <a href="/admin/">Django Admin</a>
+    <a href="{% url 'home' %}">Главная</a>
+    <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Обработка фотографий</h2>
+    <p class="text-muted">Распознавание номеров из загруженных фото</p>
+</div>
+
+<div class="card mt-3">
+    <h3>Статистика обработки</h3>
+    <div class="row">
+        <div class="col">
+            <div class="card text-center">
+                <h4>Ожидают обработки</h4>
+                <p class="stat-number" style="color: #ff9800;">{{ total_pending }}</p>
+                <p class="text-muted">фото в очереди</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if recent_processed %}
+<div class="card mt-3">
+    <h3>Недавно обработанные фото</h3>
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Фото</th>
+                    <th>Распознанный номер</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for photo in recent_processed %}
+                <tr>
+                    <td>{{ photo.original_filename }}</td>
+                    <td>
+                        {% if photo.detected_license_plate %}
+                        <strong>{{ photo.detected_license_plate }}</strong>
+                        <br><small><a href="{% url 'admin_license_plates_simple' %}">→ к списку номеров</a></small>
+                        {% else %}
+                        <span class="text-muted">Не распознан</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge badge-success">Обработано</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if recent_processed %}
+<div class="card mt-3">
+    <h3>Недавно обработанные фото</h3>
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Фото</th>
+                    <th>Распознанный номер</th>
+                    <th>Время обработки</th>
+                    <th>Статус</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for photo in recent_processed %}
+                <tr>
+                    <td>{{ photo.original_filename }}</td>
+                    <td>
+                        <strong>{{ photo.detected_license_plate }}</strong>
+                        {% if photo.detected_license_plate %}
+                        <br><small><a href="{% url 'admin_license_plates_simple' %}">→ к списку номеров</a></small>
+                        {% endif %}
+                    </td>
+                    <td>{{ photo.processing_time|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        <span class="badge badge-success">Обработано</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% if recent_failed %}
+<div class="card mt-3">
+    <h3>Недавние ошибки обработки</h3>
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Файл</th>
+                    <th>Ошибка</th>
+                    <th>Время</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for photo in recent_failed %}
+                <tr>
+                    <td>{{ photo.original_filename }}</td>
+                    <td style="color: #f44336;">
+                        {{ photo.error_message|truncatechars:100 }}
+                    </td>
+                    <td>{{ photo.upload_time|date:"d.m.Y H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<div class="card mt-3">
+    <h3>Навигация</h3>
+    <div class="row mt-2">
+        <div class="col">
+            <a href="{% url 'admin_upload_photo' %}" class="btn btn-secondary">📁 Загрузить новые фото</a>
+        </div>
+        <div class="col">
+            <a href="{% url 'admin_photo_uploads' %}" class="btn btn-secondary">📋 Все загрузки</a>
+        </div>
+        <div class="col">
+            <a href="{% url 'admin_license_plates_simple' %}" class="btn btn-secondary">🚗 Распознанные номера</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

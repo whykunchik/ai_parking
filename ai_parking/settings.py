@@ -145,3 +145,4 @@ LOGIN_REDIRECT_URL = '/'  # Куда перенаправлять после у�
 LOGOUT_REDIRECT_URL = '/'  # Куда перенаправлять после выхода
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
