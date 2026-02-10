@@ -6,7 +6,6 @@
     <span>Пользователь: {{ user.username }}</span>
     <a href="{% url 'home' %}">Главная</a>
     <a href="{% url 'dashboard' %}">Панель управления</a>
-    <a href="{% url 'my_vehicles' %}">Мои автомобили</a>
     <a href="{% url 'parking_sessions' %}">Парковочные сессии</a>
     <a href="{% url 'payments' %}">Платежи</a>
     <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
@@ -91,12 +90,6 @@
             
             <div class="card mt-3">
                 <h3>Навигация</h3>
-                <div class="row mt-2">
-                    <div class="col">
-                        <a href="{% url 'my_vehicles' %}" class="btn btn-secondary">
-                            Мои автомобили
-                        </a>
-                    </div>
                     <div class="col">
                         <a href="{% url 'payments' %}" class="btn btn-secondary">
                             Платежи

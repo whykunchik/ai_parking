@@ -137,7 +137,7 @@ STATICFILES_DIRS = [BASE_DIR / 'C:/Users/89503/Desktop/ai_parking/ai_parking/cat
 
 # Настройки медиа-файлов (загружаемые пользователями)
 MEDIA_URL = '/media/'  # URL-префикс для медиа
-MEDIA_ROOT = BASE_DIR / 'media'  # Папка для хранения медиа
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # Папка для хранения медиа
 
 # Настройки аутентификации
 LOGIN_URL = '/users/login/'  # URL для входа (если требуется аутентификация)

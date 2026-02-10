@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Загруженные видео - Админ-панель{% endblock %}
+
+{% block navigation %}
+    <span>Администратор: {{ user.username }}</span>
+    <a href="{% url 'admin_dashboard' %}">Админ-панель</a>
+    <a href="/admin/">Django Admin</a>
+    <a href="{% url 'home' %}">Главная</a>
+    <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Загруженные видео</h2>
+    <p class="text-muted">Все загруженные видео в системе</p>
+</div>
+
+<div class="card mt-3">
+    <h3>Статистика</h3>
+    <div class="row">
+        <div class="col">
+            <div class="card text-center">
+                <h4>Всего видео</h4>
+                <p class="stat-number">{{ stats.total }}</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center">
+                <h4>Ожидают</h4>
+                <p class="stat-number" style="color: #ff9800;">{{ stats.pending }}</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center">
+                <h4>Обработано</h4>
+                <p class="stat-number" style="color: #4caf50;">{{ stats.completed }}</p>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center">
+                <h4>Ошибки</h4>
+                <p class="stat-number" style="color: #f44336;">{{ stats.failed }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <h3>Фильтр по статусу</h3>
+    <div class="row mt-2">
+        <div class="col">
+            <a href="?status=all" class="btn {% if current_filter == 'all' %}btn-primary{% else %}btn-secondary{% endif %}">Все ({{ stats.total }})</a>
+        </div>
+        <div class="col">
+            <a href="?status=pending" class="btn {% if current_filter == 'pending' %}btn-primary{% else %}btn-secondary{% endif %}">Ожидают ({{ stats.pending }})</a>
+        </div>
+        <div class="col">
+            <a href="?status=completed" class="btn {% if current_filter == 'completed' %}btn-primary{% else %}btn-secondary{% endif %}">Обработано ({{ stats.completed }})</a>
+        </div>
+        <div class="col">
+            <a href="?status=failed" class="btn {% if current_filter == 'failed' %}btn-primary{% else %}btn-secondary{% endif %}">Ошибки ({{ stats.failed }})</a>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <h3>Список видео</h3>
+    
+    {% if videos %}
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Файл</th>
+                    <th>Размер</th>
+                    <th>Время загрузки</th>
+                    <th>Статус</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for video in videos %}
+                <tr>
+                    <td>{{ video.id }}</td>
+                    <td>
+                        <strong>{{ video.original_filename }}</strong><br>
+                        <small class="text-muted">{{ video.saved_filename }}</small>
+                    </td>
+                    <td>{{ video.file_size|filesizeformat }}</td>
+                    <td>{{ video.upload_time|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        {% if video.status == 'pending' %}
+                        <span class="badge badge-warning">Ожидает</span>
+                        {% elif video.status == 'processing' %}
+                        <span class="badge badge-info">В обработке</span>
+                        {% elif video.status == 'completed' %}
+                        <span class="badge badge-success">Обработано</span>
+                        {% elif video.status == 'failed' %}
+                        <span class="badge badge-error">Ошибка</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            {% if video.status == 'pending' %}
+                            <a href="{% url 'extract_frames' video.id %}" class="btn btn-small btn-primary">🎬 Извлечь кадры</a>
+                            {% endif %}
+                            
+                            <form method="post" action="{% url 'delete_video' video.id %}" style="display: inline;" onsubmit="return confirm('Удалить это видео?')">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-small btn-danger">🗑️ Удалить</button>
+                            </form>
+                            
+                            {% if video.error_message %}
+                            <button class="btn btn-small" onclick="alert('{{ video.error_message|escapejs }}')">📝 Показать ошибку</button>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <p>Видео не найдено.</p>
+    </div>
+    {% endif %}
+</div>
+
+<div class="card mt-3">
+    <h3>Навигация</h3>
+    <div class="row mt-2">
+        <div class="col">
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-secondary">← Назад в админ-панель</a>
+        </div>
+        <div class="col">
+            <a href="{% url 'admin_license_plates_simple' %}" class="btn btn-secondary">🚗 Распознанные номера</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

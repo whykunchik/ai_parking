@@ -149,3 +149,34 @@ class PhotoUpload(models.Model):
     
     def __str__(self):
         return f"{self.original_filename} ({self.get_status_display()})"
+    
+class VideoUpload(models.Model):
+    """Модель для хранения загруженных видео"""
+    STATUS_CHOICES = [
+        ('pending', 'Ожидает обработки'),
+        ('processing', 'В обработке'),
+        ('completed', 'Обработано'),
+        ('failed', 'Ошибка'),
+    ]
+    
+    STATUS_DISPLAY = dict(STATUS_CHOICES)
+    
+    original_filename = models.CharField(max_length=255, verbose_name='Оригинальное имя файла')
+    saved_filename = models.CharField(max_length=255, verbose_name='Сохраненное имя файла')
+    file_path = models.CharField(max_length=500, verbose_name='Путь к файлу')
+    file_size = models.IntegerField(verbose_name='Размер файла (байт)')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', verbose_name='Статус')
+    error_message = models.TextField(blank=True, null=True, verbose_name='Сообщение об ошибке')
+    upload_time = models.DateTimeField(auto_now_add=True, verbose_name='Время загрузки')
+    
+    class Meta:
+        verbose_name = 'Загруженное видео'
+        verbose_name_plural = 'Загруженные видео'
+        ordering = ['-upload_time']
+    
+    def get_status_display(self):
+        """Возвращает отображаемое значение статуса"""
+        return self.STATUS_DISPLAY.get(self.status, self.status)
+    
+    def __str__(self):
+        return f"{self.original_filename} ({self.get_status_display()})"

@@ -1,31 +1,14 @@
-"""
-URL configuration for ai_parking project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/6.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView, RedirectView
-
 from django.conf import settings
 from django.conf.urls.static import static
 from catalog.views import (
     login_view, user_dashboard_view, admin_dashboard_view, 
-    register_view, my_vehicles_view, parking_sessions_view, 
+    register_view, parking_sessions_view, 
     payments_view, logout_view, admin_car_owners_short_view,
     admin_license_plates_short_view, admin_failed_payments_short_view,
-    admin_upload_photo_view,
+    admin_video_uploads_view, extract_frames_from_video, delete_video,
 )
 
 urlpatterns = [  
@@ -33,7 +16,9 @@ urlpatterns = [
     path('admin/car-owners-simple/', admin_car_owners_short_view, name='admin_car_owners_simple'),    
     path('admin/license-plates-simple/', admin_license_plates_short_view, name='admin_license_plates_simple'),
     path('admin/failed-payments-simple/', admin_failed_payments_short_view, name='admin_failed_payments_simple'),
-    path('admin/upload-photo/', admin_upload_photo_view, name='admin_upload_photo'),
+    path('admin/video-uploads/', admin_video_uploads_view, name='admin_video_uploads'),
+    path('admin/extract-frames/<int:video_id>/', extract_frames_from_video, name='extract_frames'),
+    path('admin/delete-video/<int:video_id>/', delete_video, name='delete_video'),
 
     # Основные страницы
     path('catalog/', RedirectView.as_view(url='/', permanent=True)),
@@ -44,7 +29,6 @@ urlpatterns = [
     
     # Пользовательские страницы    
     path('dashboard/', user_dashboard_view, name='dashboard'),
-    path('my-vehicles/', my_vehicles_view, name='my_vehicles'),
     path('parking-sessions/', parking_sessions_view, name='parking_sessions'),
     path('payments/', payments_view, name='payments'),
     

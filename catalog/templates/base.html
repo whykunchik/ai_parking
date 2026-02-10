@@ -15,7 +15,9 @@
             {% if user.is_authenticated %}
                 <span>Пользователь: {{ user.username }}</span>
                 <a href="{% url 'home' %}">Главная</a>
-                <a href="{% url 'dashboard' %}">Панель управления</a> 
+                <a href="{% url 'dashboard' %}">Панель управления</a>
+                <a href="{% url 'parking_sessions' %}">Парковочные сессии</a>
+                <a href="{% url 'payments' %}">Платежи</a>
                 <a href="{% url 'logout' %}?next={% url 'home' %}">Выйти</a>
             {% else %}
                 <a href="{% url 'home' %}">Главная</a>
