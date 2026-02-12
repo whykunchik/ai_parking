@@ -560,6 +560,7 @@ def extract_frames_from_video(request, video_id):
             if not ret:
                 break
             
+            #POPAAAA
             # Сохраняем каждый 10-й кадр
             if frame_count % 10 == 0:
                 frame_filename = f"frame_{frame_count:04d}.jpg"
